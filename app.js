@@ -3,27 +3,28 @@ const next = require('next')
 require('dotenv').config();
 const {ObjectId,MongoClient}  = require('mongodb');
 const dev = process.env.NODE_ENV !== 'production'
-const server = next({ dev })
-const handle = server.getRequestHandler()
+const {server,handle} = require('./server');
+//const handle = server.getRequestHandler()
 
-server.prepare().then(() => {
-  const app = express()
+
+
+const app = express()
   app.use(express.json());
-  app.use(async (req, res, next) => {
+  const mongoMiddleware = async (req, res, next) => {
     try {
-      console.log("process.env.MONGOURI",process.env.MONGOURI)
-      const client = await MongoClient.connect(process.env.MONGOURI);
-      const db = client.db('mbs');
-
-      req.db = db;
-      next();
-    } catch (error) {
-      console.error('Error connecting to MongoDB:', error);
-      res.sendStatus(500);
-    }
-  });
+          //console.log("process.env.MONGOURI",process.env.MONGOURI)
+          const client = await MongoClient.connect(process.env.MONGOURI);
+          const db = client.db('mbs');
+    
+          req.db = db;
+          next();
+        } catch (error) {
+          console.error('Error connecting to MongoDB:', error);
+          res.sendStatus(500);
+        }
+  };
   app.get('/hello', (req, res) => res.send('Namaste Home Page'));
-  app.get('/leads', async (req, res) => {
+  app.get('/leads',mongoMiddleware, async (req, res) => {
     try {
       console.log("inside rides")
       const collection = req.db.collection('leads');
@@ -34,7 +35,7 @@ server.prepare().then(() => {
       res.sendStatus(500);
     }
   });
-  app.post('/leads', async (req, res) => {
+  app.post('/leads',mongoMiddleware, async (req, res) => {
     try {
       const collection = req.db.collection('leads');
       const response = await collection.insertOne(req.body);
@@ -44,7 +45,7 @@ server.prepare().then(() => {
       res.sendStatus(500);
     }
   });
-  app.delete('/leads/:id', async (req, res) => {
+  app.delete('/leads/:id', mongoMiddleware,async (req, res) => {
     try {
       const collection = req.db.collection('leads');
       console.log("req.params.id",req.params.id)
@@ -58,7 +59,7 @@ server.prepare().then(() => {
       res.sendStatus(500);
     }
   });
-  app.patch('/leads/:id', async (req, res) => {
+  app.patch('/leads/:id',mongoMiddleware, async (req, res) => {
     try {
       const userId = req.params.id;
       const updatedFields = req.body;
@@ -79,13 +80,6 @@ server.prepare().then(() => {
 
 
 
-
-
-
-
-
-
-
   app.get('*', (req, res) => {
     return handle(req, res)
   })
@@ -93,8 +87,4 @@ server.prepare().then(() => {
     if (err) throw err
     console.log(`Server is listening on port ${process.env.NODE_ENV} `)
   })
-})
-.catch((ex) => {
-  console.error(ex.stack)
-  process.exit(1)
-})
+
