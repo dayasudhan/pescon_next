@@ -1,0 +1,18 @@
+{
+  "name": "pescon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "dev": "node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "next": "^13.4.11",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
