@@ -22,7 +22,7 @@ handlePdfItemClick = (e, { name ,href}) => {
   const searchParams = new URLSearchParams(window.location.search);
   const id = searchParams.get('id');
   console.log('id:', id);
-  axios.get('/leads/pdf?id='+id)
+  axios.get('/pdf?id='+id)
   .then(response => {
     console.log("response",response.data);
   })

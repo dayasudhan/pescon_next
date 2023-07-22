@@ -4,6 +4,10 @@ require('dotenv').config();
 const {ObjectId,MongoClient}  = require('mongodb');
 const dev = process.env.NODE_ENV !== 'production'
 const {server,handle} = require('./server');
+const os = require('os');
+const path = require('path');
+const puppeteer = require('puppeteer');
+//import * as puppeteer from 'puppeteer'
 //const handle = server.getRequestHandler()
 
 
@@ -108,7 +112,15 @@ const app = express()
     req.client.close();
   });
 
-
+  app.get('/pdf', async (req, res) => {
+    try {
+      console.log("req.query.id",req.query.id)
+      generatePDF(req.query.id)
+    } catch (error) {
+      console.error('Error retrieving users from MongoDB:', error);
+      res.sendStatus(500);
+    }    
+  });
 
   app.get('*', (req, res) => {
     return handle(req, res)
@@ -117,4 +129,32 @@ const app = express()
     if (err) throw err
     console.log(`Server is listening on port ${process.env.NODE_ENV} `)
   })
-
+  function getWindowsDownloadFolderPath() {
+    const homeDir = os.homedir();
+    const downloadFolderPath = path.join(homeDir, 'Downloads');
+    return downloadFolderPath;
+  };
+  async function generatePDF(id) {
+    const downloadPath = getWindowsDownloadFolderPath();
+    const outputpath = `${downloadPath}\\leads_${id}.pdf`;
+    console.log("generatePDF 0000 .................")
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    const pageopts ={
+      format: 'letter',
+      printBackground: true,
+      margin: { top: '0px', bottom: '0px', left: '0px', right: '0px' },
+      preferCSSPageSize: true,
+    }
+  
+    let url = 'http://localhost:3000/info/?id=' +id;
+    console.log("url",url,)
+    await page.goto(url); // Replace with the URL or HTML content you want to generate PDF from
+  
+    await page.pdf({
+      path: outputpath, // Specify the path where the PDF file will be saved
+      format: 'A4' // Specify the page format (e.g., 'A4', 'Letter', etc.)
+    });
+    console.log(`generatePDF 123 ${outputpath} `)
+    await browser.close();
+  }
