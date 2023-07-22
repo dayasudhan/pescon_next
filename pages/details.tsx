@@ -1,6 +1,6 @@
 import React, { useState , useEffect } from 'react'
 import axios from 'axios';
-import { Segment, Input, Label, Form, Button } from 'semantic-ui-react';
+import { Segment, Input, Label, Form, Button ,Checkbox,TextArea} from 'semantic-ui-react';
 
 const SegmentExampleNestedSegments = () => {
   // const [name, setName] = useState('')
@@ -18,6 +18,12 @@ const SegmentExampleNestedSegments = () => {
     serviceBeginDate: '',
     serviceExpirationDate: '',
     pestsToControl: [],
+    serviceFrequency:'Monthly',
+    propertyType:'Commercial',
+    renewal:false,
+    pestsToBeControlled:"",
+    paymentTerms:"",
+    billingInstructions:""
   });
 
   const handleInputChange = (event) => {
@@ -43,10 +49,11 @@ const SegmentExampleNestedSegments = () => {
   <Segment.Group>
     <Segment.Group horizontal>
       <Segment>
-         <h3>Service Contract Input Form</h3>
+      <Segment textAlign='center'> <h3>Service Contract Input Form</h3></Segment>
         <p></p>{' '}
         <Form onSubmit={handleSubmit}>
         <Form.Field>
+        <label>Customer Details</label>
         <Input name="name" 
           focus placeholder="Name..."
           value={formData.name} 
@@ -85,7 +92,75 @@ const SegmentExampleNestedSegments = () => {
         </Form.Field>
         <p></p>
         <Form.Field>
-          <label>Start Date</label>
+          <label>Person To be Contacted</label>
+        <Input name="name1" 
+          focus placeholder="Contact name..."
+          value={formData.personToContact} 
+          onChange={handleInputChange} />
+        </Form.Field>
+        <p></p>
+        <Form.Field>
+           <Input name="conntactPhone"
+           focus placeholder="Phone Number"
+           value={formData.personToContactPhone} 
+           onChange={handleInputChange} />
+         </Form.Field>
+        <p></p>
+        <Form.Field>
+        Property to be serviced: <b>{formData.propertyType}</b>
+      </Form.Field>
+      <Form.Field>
+        <Checkbox
+          radio
+          label='Commercial'
+          name='checkboxRadioGroup'
+          value='this'
+          checked={formData.propertyType === 'this'}
+          onChange={handleInputChange} />
+      </Form.Field>
+      <Form.Field>
+        <Checkbox
+          radio
+          label='Residential'
+          name='checkboxRadioGroup'
+          value='that'
+          checked={formData.propertyType === 'this'}
+          onChange={handleInputChange} />  
+      </Form.Field>
+        <p></p>
+        <Form.Field>
+        Service Frequeny: <b>{formData.serviceFrequency}</b>
+      </Form.Field>
+      <Form.Field>
+        <Checkbox
+          radio
+          label='Monthly'
+          name='checkboxRadioGroup'
+          value='this'
+          checked={formData.serviceFrequency === 'this'}
+          onChange={handleInputChange} />
+      </Form.Field>
+      <Form.Field>
+        <Checkbox
+          radio
+          label='Quarterly'
+          name='checkboxRadioGroup'
+          value='that'
+          checked={formData.serviceFrequency === 'this'}
+          onChange={handleInputChange} />  
+      </Form.Field>
+      <Form.Field>
+        <Checkbox
+          radio
+          label='AMC'
+          name='checkboxRadioGroup'
+          value='this'
+          checked={formData.serviceFrequency === 'this'}
+          onChange={handleInputChange} />
+      </Form.Field>
+        <p></p>
+        <Form.Field>
+          <label>Service Start Date</label>
           <Input name="serviceBeginDate" 
             type="date"
             focus placeholder="Start Date" 
@@ -94,13 +169,46 @@ const SegmentExampleNestedSegments = () => {
         </Form.Field>
         <p></p>
         <Form.Field>
-          <label>End Date</label>
+          <label>Service End Date</label>
           <Input name="serviceExpirationDate" 
           type="date" 
           value={formData.serviceExpirationDate} 
           onChange={handleInputChange} />
         </Form.Field>
         <p></p>
+        <Form.Field>
+       Renewal: 
+      </Form.Field>
+      <Form.Field>
+        <Checkbox
+          label='Renewal'
+          checked={formData.renewal}
+          onChange={handleInputChange} />
+      </Form.Field>
+        <p></p>
+        <Form.Field>
+          <label>Pests to be Controlled</label>
+          <TextArea rows={2} 
+          placeholder='Describe...' 
+          value={formData.pestsToBeControlled} 
+          onChange={handleInputChange}/>
+        </Form.Field>
+        <p></p>
+        <Form.Field>
+          <label>Payment Terms</label>
+          <TextArea rows={2} 
+          placeholder='Describe...' 
+          value={formData.paymentTerms} 
+          onChange={handleInputChange}/>
+        </Form.Field>
+        <p></p>
+        <Form.Field>
+          <label>Billing Instructions </label>
+          <TextArea rows={2} 
+          placeholder='Describe...' 
+          value={formData.billingInstructions} 
+          onChange={handleInputChange}/>
+        </Form.Field>
         <div style={{ display: 'flex' }}>
         <a href="/buyer/home/home">
           <Button color="primary" style={{ marginLeft: 'auto' }}>
@@ -110,31 +218,7 @@ const SegmentExampleNestedSegments = () => {
         </div>
         </Form>
       </Segment>
-
-      {/* <Segment>
-        Payment Method (Future mPurpose)
-        <Segment.Group>
-          <Segment>Middle</Segment>
-          <Segment>Middle</Segment>
-        </Segment.Group>
-      </Segment> */}
     </Segment.Group>
-    {/* <Segment.Group horizontal>
-      <Segment>
-        Delivery Address
-        <Segment.Group>
-          <Segment>Middle</Segment>
-          <Segment>Middle</Segment>
-        </Segment.Group>
-      </Segment>
-      <Segment>
-        Shipping Method
-        <Segment.Group>
-          <Segment>Middle</Segment>
-          <Segment>Middle</Segment>
-        </Segment.Group>
-      </Segment>
-    </Segment.Group> */}
   </Segment.Group>
 )};
 
