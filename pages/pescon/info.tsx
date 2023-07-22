@@ -1,6 +1,6 @@
 import React , { useState, useEffect } from 'react';
 import { Table,Button,Container, Divider, Grid, Header, Image,Segment } from 'semantic-ui-react';
-import { useParams } from 'react-router-dom';
+
 import axios from 'axios';
 function CustomerInfoPage() {
   const [data, setData] = useState(null);

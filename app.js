@@ -17,6 +17,8 @@ const app = express()
           const db = client.db('mbs');
     
           req.db = db;
+          req.client = client;
+          console.log("mongomiddleware 1")
           next();
         } catch (error) {
           console.error('Error connecting to MongoDB:', error);
@@ -24,6 +26,29 @@ const app = express()
         }
   };
   app.get('/hello', (req, res) => res.send('Namaste Home Page'));
+  app.get('/leads/:id',mongoMiddleware, async(req, res) => 
+  {
+    console.log("req",req.params,req.url,req.params.id);
+    try {
+      const collection = req.db.collection('leads');
+      //const objectId =new mongodb.ObjectID(req.params.id);
+      const objectId = new ObjectId(req.params.id);
+      const result = await collection.findOne({ _id :objectId});
+      console.log("inside leades/id",req.params.id,result)
+      if (result) {
+        res.json(result);
+      } else {
+        res.status(404).json({ message: 'Document not found' });
+      }
+      
+      
+    } catch (error) {
+      console.error('Error retrieving users from MongoDB:', error);
+      res.sendStatus(500);
+    }
+    console.log("close the monogdbclient")
+    req.client.close();
+  });
   app.get('/leads',mongoMiddleware, async (req, res) => {
     try {
       console.log("inside rides")
@@ -34,6 +59,8 @@ const app = express()
       console.error('Error retrieving users from MongoDB:', error);
       res.sendStatus(500);
     }
+    console.log("close the monogdbclient")
+    req.client.close();
   });
   app.post('/leads',mongoMiddleware, async (req, res) => {
     try {
@@ -44,6 +71,7 @@ const app = express()
       console.error('Error retrieving leads from MongoDB:', error);
       res.sendStatus(500);
     }
+    req.client.close();
   });
   app.delete('/leads/:id', mongoMiddleware,async (req, res) => {
     try {
@@ -58,6 +86,7 @@ const app = express()
       console.error('Error retrieving leads from MongoDB:', error);
       res.sendStatus(500);
     }
+    req.client.close();
   });
   app.patch('/leads/:id',mongoMiddleware, async (req, res) => {
     try {
@@ -76,6 +105,7 @@ const app = express()
       console.error('Error retrieving users from MongoDB:', error);
       res.sendStatus(500);
     }
+    req.client.close();
   });
 
 
