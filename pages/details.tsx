@@ -93,18 +93,18 @@ const SegmentExampleNestedSegments = () => {
         <p></p>
         <Form.Field>
           <label>Person To be Contacted</label>
-        <Input name="name1" 
+        <Input name="personToContact" 
           focus placeholder="Contact name..."
           value={formData.personToContact} 
           onChange={handleInputChange} />
         </Form.Field>
         <p></p>
         <Form.Field>
-           <Input name="conntactPhone"
+          <Input name="personToContactPhone"
            focus placeholder="Phone Number"
            value={formData.personToContactPhone} 
            onChange={handleInputChange} />
-         </Form.Field>
+        </Form.Field>
         <p></p>
         <Form.Field>
         Property to be serviced: <b>{formData.propertyType}</b>
@@ -113,16 +113,16 @@ const SegmentExampleNestedSegments = () => {
         <Checkbox
           radio
           label='Commercial'
-          name='checkboxRadioGroup'
+          name='propertyType'
           value='this'
-          checked={formData.propertyType === 'this'}
+          checked={formData.propertyType['propertyType'] === 'this'}
           onChange={handleInputChange} />
       </Form.Field>
       <Form.Field>
         <Checkbox
           radio
           label='Residential'
-          name='checkboxRadioGroup'
+          name='propertyType'
           value='that'
           checked={formData.propertyType === 'this'}
           onChange={handleInputChange} />  
@@ -188,7 +188,8 @@ const SegmentExampleNestedSegments = () => {
         <p></p>
         <Form.Field>
           <label>Pests to be Controlled</label>
-          <TextArea rows={2} 
+          <TextArea name="pestsToBeControlled"
+          rows={2} 
           placeholder='Describe...' 
           value={formData.pestsToBeControlled} 
           onChange={handleInputChange}/>
@@ -196,7 +197,8 @@ const SegmentExampleNestedSegments = () => {
         <p></p>
         <Form.Field>
           <label>Payment Terms</label>
-          <TextArea rows={2} 
+          <TextArea name="paymentTerms"
+          rows={2} 
           placeholder='Describe...' 
           value={formData.paymentTerms} 
           onChange={handleInputChange}/>
@@ -204,7 +206,8 @@ const SegmentExampleNestedSegments = () => {
         <p></p>
         <Form.Field>
           <label>Billing Instructions </label>
-          <TextArea rows={2} 
+          <TextArea name='billingInstructions'
+          rows={2} 
           placeholder='Describe...' 
           value={formData.billingInstructions} 
           onChange={handleInputChange}/>
