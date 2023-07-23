@@ -45,7 +45,7 @@ const SegmentExampleNestedSegments = () => {
       console.log("response1",response);
       console.log("response2",response?.data?.insertedId);
       setTimeout(() => {
-        setResponseText(`Customer Inserted With Id : ${response?.data?.insertedId}`); // Set the response text to be shown in the modal
+        setResponseText(`Customer Inserted Successfully With Id : ${response?.data?.insertedId}`); // Set the response text to be shown in the modal
         setShowModal(true); // Show the modal
       }, 1000); // Delay of 1 second
     })
@@ -55,10 +55,7 @@ const SegmentExampleNestedSegments = () => {
   }
   const closeModal = () => {
     setShowModal(false);
-    setResponseText('');
-    if (formRef.current) {
-      formRef.current.reset(); // Reset the form fields to their initial values
-    }
+    location.reload();
   };
   return (
   <Segment.Group>
