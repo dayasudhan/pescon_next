@@ -2,7 +2,7 @@ import React , { useState, useEffect } from 'react';
 import { Table,Button,Container, Divider, Grid, Header, Image,Segment } from 'semantic-ui-react';
 
 import axios from 'axios';
-function CustomerInfoPage() {
+function dataInfoPage() {
   const [data, setData] = useState(null);
   const [id, setId] = useState(0);
   useEffect(() => {
@@ -15,41 +15,11 @@ function CustomerInfoPage() {
     .then(response => {
       setData(response.data);
       console.log("data",data)
-     //setData(data)
     })
     .catch(error => {
       console.log(error);
     });
   });
-  const customer = {
-    name: data?.name,
-    phone: data?.phone,
-    address: data?.address,
-    personToContact: data?.personToContact,
-    personToContactPhone: data?.personToContactPhone,
-    propertyType: data?.propertyType,
-    serviceBeginDate: data?.serviceBeginDate,
-    serviceExpirationDate: data?.serviceExpirationDate,
-    reneval: data?.reneval,
-    serviceFrequency: data?.serviceFrequency,
-    pestsToControl: data?.pestsToControl,
-    paymentTerms: data?.paymentTerms,
-    billingInstructions: data?.billingInstructions,
-    signatoryName: data?.signatoryName,
-    signatoryDesignation: data?.signatoryDesignation,
-    customerSignature: data?.customerSignature,
-  };
-  const handleButtonClick = () => {
-    // Make API call using fetch
-    axios.get('/pdf')
-      .then(response => {
-        setData(response.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
-
 
     return (
       <div className="contract-container">
@@ -60,12 +30,12 @@ function CustomerInfoPage() {
     <Grid container columns={2} stackable>
       <Grid.Column>
         <Segment> <div className="grid-item">
-          {/* <h2>Customer Information</h2> */}
-          <p><strong>Name:</strong> {customer.name}</p>
-          <p><strong>Phone:</strong> {customer.phone}</p>
-          <p><strong>Address:</strong> {customer.address}</p>
-          <p><strong>Contact Person:</strong> {customer.personToContact}</p>
-          <p><strong>Contact Phone:</strong> {customer.personToContactPhone}</p>
+          {/* <h2>data Information</h2> */}
+          <p><strong>Name:</strong> {data?.name}</p>
+          <p><strong>Phone:</strong> {data?.phone}</p>
+          <p><strong>Address:</strong> {data?.address}</p>
+          <p><strong>Contact Person:</strong> {data?.personToContact}</p>
+          <p><strong>Contact Phone:</strong> {data?.personToContactPhone}</p>
           
         </div></Segment>
       </Grid.Column>
@@ -75,38 +45,38 @@ function CustomerInfoPage() {
           <p><strong>PESCON - Pest Control Services</strong></p>
           <p><strong>Address:</strong> Rashmi Arcade , Opp Lakshmi Theater</p>
           <p><strong></strong> Jail Road, Shivamogga -577201</p>
-          <p><strong>Contact Phone:</strong> {customer.personToContactPhone}</p>
-          {/* <p><strong>Secondary Phone:</strong> {customer.personToContactPhone}</p> */}
+          <p><strong>Contact Phone:</strong> {data?.personToContactPhone}</p>
+          {/* <p><strong>Secondary Phone:</strong> {data?.personToContactPhone}</p> */}
         </div></Segment>
       </Grid.Column>
       <Grid.Column>
       <Segment> <div className="grid-item">
-          {/* <h2>Customer Information</h2> */}
-          <p><strong>Person to be contacted: </strong> {customer.name}</p>
-          <p><strong>Phone:</strong> {customer.phone}</p>          
+          {/* <h2>data Information</h2> */}
+          <p><strong>Person to be contacted: </strong> {data?.name}</p>
+          <p><strong>Phone:</strong> {data?.phone}</p>          
         </div></Segment>
       </Grid.Column>
       <Grid.Column>
       <Segment> <div className="grid-item">
-          {/* <h2>Customer Information</h2> */}
-          <p><strong>Property to be serviced:</strong> {customer.propertyType}</p>
-          <p><strong>Notes:</strong> {customer.notes}</p>          
+          {/* <h2>data Information</h2> */}
+          <p><strong>Property to be serviced:</strong> {data?.propertyType}</p>
+          <p><strong>Notes:</strong> {data?.notes}</p>          
         </div></Segment>
       </Grid.Column>
       <Grid.Column>
         <Segment> <div className="grid-item">
           <h3>Service Details</h3>
-          <p><strong>Service Begin Date:</strong> {customer.serviceBeginDate}</p>
-          <p><strong>Service Expiration Date:</strong> {customer.serviceExpirationDate}</p>
-          <p><strong>Reneval:</strong> {customer.reneval}</p>
-          <p><strong>Service Type:</strong> {customer.serviceFrequency}</p>
-          <p><strong>Other:</strong> {customer.otherservicedetails}</p>
+          <p><strong>Service Begin Date:</strong> {data?.serviceBeginDate}</p>
+          <p><strong>Service Expiration Date:</strong> {data?.serviceExpirationDate}</p>
+          <p><strong>Reneval:</strong> {data?.reneval}</p>
+          <p><strong>Service Type:</strong> {data?.serviceFrequency}</p>
+          <p><strong>Other:</strong> {data?.otherservicedetails}</p>
         </div></Segment>
       </Grid.Column>
       <Grid.Column>
       <Segment> <div className="grid-item">
           <h3>Pests to be controlled</h3>
-          <p>{customer.pestsToControl} <br/>
+          <p>{data?.pestsToControl} <br/>
           </p>
         </div></Segment>
       </Grid.Column>
@@ -116,7 +86,7 @@ function CustomerInfoPage() {
     <Grid.Column>
         <Segment> <div className="grid-item">
           <h3>Payment Terms</h3>
-          <p>{customer.paymentTerms} <br/>
+          <p>{data?.paymentTerms} <br/>
           </p>
         
          
@@ -125,7 +95,7 @@ function CustomerInfoPage() {
       <Grid.Column>
       <Segment> <div className="grid-item">
           <h3>Billing Instructions</h3>
-          <p>{customer.billingInstructions} <br/>
+          <p>{data?.billingInstructions} <br/>
           </p>
         </div></Segment>
       </Grid.Column>
@@ -135,7 +105,7 @@ function CustomerInfoPage() {
           <h4>SERVICES CHARGES :</h4>
           <p>We hereby agreed to pay your charges of rupees 18000 only (Rupees Eighteen Thousand rupees only) and Service tax whenever applicable, for this contract prior to commencement of the initial treatment, for management of pests as specified herein and or in the schedule to the extent necessary to reasonable free the said promises from their presence 
 Your contact terms and requirement for the treatment as mentioned overleaf. (Please sign and return copy of this agreement in acceptance) We accept the agreement with thanks.</p>
-          <p><strong>Service Expiration Date:</strong> {customer.serviceExpirationDate}</p>
+          <p><strong>Service Expiration Date:</strong> {data?.serviceExpirationDate}</p>
           
         </div>
         </Grid>
@@ -143,16 +113,16 @@ Your contact terms and requirement for the treatment as mentioned overleaf. (Ple
         <Grid container columns={2} stackable>
         <Grid.Column>
        <div className="grid-item">
-          {/* <h2>Customer Information</h2> */}
+          {/* <h2>data Information</h2> */}
           <p><strong>For:</strong> PESCON(PEST CONTROL SERVICES)</p>
           <p>(Name and Designation of signatory)</p>          
         </div>
       </Grid.Column>
       <Grid.Column>
        <div className="grid-item">
-          {/* <h2>Customer Information</h2> */}
+          {/* <h2>data Information</h2> */}
           <p>Yours Truly,</p>
-          <p>(Customer's Signature and Office Stamp)</p>          
+          <p>(data's Signature and Office Stamp)</p>          
         </div>
       </Grid.Column>
       </Grid>
@@ -161,4 +131,4 @@ Your contact terms and requirement for the treatment as mentioned overleaf. (Ple
   
 }
 
-export default CustomerInfoPage;
+export default dataInfoPage;
