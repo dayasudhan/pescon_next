@@ -13,7 +13,7 @@ function CustomerListComponent() {
     axios.get('/leads')
       .then(response => {
         setData(response.data);
-        setFilteredData(data);
+        setFilteredData(response.data);
       })
       .catch(error => {
         console.log(error);
