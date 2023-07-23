@@ -1,57 +1,72 @@
-import React, { useState , useEffect } from 'react'
+import React, { useState ,useRef , useEffect } from 'react'
 import axios from 'axios';
-import { Segment, Input, Label, Form, Button ,Checkbox,TextArea} from 'semantic-ui-react';
+import { Segment, Input, Form, Button ,Checkbox,TextArea,Modal } from 'semantic-ui-react';
 
 const SegmentExampleNestedSegments = () => {
-  // const [name, setName] = useState('')
-  // const [email, setEmail] = useState('')
-  // const [phone, setPhone] = useState('')
+  const [showModal, setShowModal] = useState(false);
+  const [responseText, setResponseText] = useState('');
+  const formRef = useRef(null);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     address: "",
     email: "",
-    land_mark:"",
+    landMark:"",
     city:"",
     personToContact: "",
     personToContactPhone: "",
     serviceBeginDate: '',
     serviceExpirationDate: '',
-    pestsToControl: [],
+    pestsToControl: '',
     serviceFrequency:'Monthly',
     propertyType:'Commercial',
-    renewal:false,
+    reneval:false,
     pestsToBeControlled:"",
     paymentTerms:"",
     billingInstructions:""
   });
 
   const handleInputChange = (event) => {
-    console.log("event",event)
+    console.log("event",event.target)
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
-
+  const handleRadioInputChange = (name,value) => {
+    console.log("handleRadioInputChange",name,value)
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleSubmit = (event) => {
+    console.log("name",name)
     event.preventDefault()
     console.log("formData",formData)
     axios.post('/leads', formData)
     .then(response => {
-      console.log("response",response);
+      console.log("response1",response);
+      console.log("response2",response?.data?.insertedId);
+      setTimeout(() => {
+        setResponseText(`Customer Inserted With Id : ${response?.data?.insertedId}`); // Set the response text to be shown in the modal
+        setShowModal(true); // Show the modal
+      }, 1000); // Delay of 1 second
     })
     .catch(error => {
       console.error("error",error);
     });
-    // console.log(`Submitted form with name: ${name}, email: ${email}, and phone: ${phone}`)
   }
+  const closeModal = () => {
+    setShowModal(false);
+    setResponseText('');
+    if (formRef.current) {
+      formRef.current.reset(); // Reset the form fields to their initial values
+    }
+  };
   return (
   <Segment.Group>
     <Segment.Group horizontal>
       <Segment>
       <Segment textAlign='center'> <h3>Service Contract Input Form</h3></Segment>
         <p></p>{' '}
-        <Form onSubmit={handleSubmit}>
+        <Form ref={formRef} onSubmit={handleSubmit}>
         <Form.Field>
         <label>Customer Details</label>
         <Input name="name" 
@@ -68,9 +83,9 @@ const SegmentExampleNestedSegments = () => {
         </Form.Field>
         <p></p>
         <Form.Field>
-          <Input name="land_mark"
+          <Input name="landMark"
           focus placeholder="Land Mark..." 
-          value={formData.land_mark} 
+          value={formData.landMark} 
           onChange={handleInputChange}
           />
         </Form.Field>
@@ -114,17 +129,17 @@ const SegmentExampleNestedSegments = () => {
           radio
           label='Commercial'
           name='propertyType'
-          value='this'
-          checked={formData.propertyType['propertyType'] === 'this'}
-          onChange={handleInputChange} />
+          value='Commercial'
+          checked={formData.propertyType === 'Commercial'}
+          onChange={(e, data) => handleRadioInputChange(data.name,data.value )} /> 
       </Form.Field>
       <Form.Field>
         <Checkbox
           radio
           label='Residential'
           name='propertyType'
-          value='that'
-          checked={formData.propertyType === 'this'}
+          value='Residential'
+          checked={formData.propertyType === 'Residential'}
           onChange={handleInputChange} />  
       </Form.Field>
         <p></p>
@@ -135,28 +150,28 @@ const SegmentExampleNestedSegments = () => {
         <Checkbox
           radio
           label='Monthly'
-          name='checkboxRadioGroup'
-          value='this'
-          checked={formData.serviceFrequency === 'this'}
-          onChange={handleInputChange} />
+          name='serviceFrequency'
+          value='Monthly'
+          checked={formData.serviceFrequency === 'Monthly'}
+          onChange={(e, data) => handleRadioInputChange(data.name,data.value )} /> 
       </Form.Field>
       <Form.Field>
         <Checkbox
           radio
           label='Quarterly'
-          name='checkboxRadioGroup'
-          value='that'
-          checked={formData.serviceFrequency === 'this'}
-          onChange={handleInputChange} />  
+          name='serviceFrequency'
+          value='Quarterly'
+          checked={formData.serviceFrequency === 'Quarterly'}
+          onChange={(e, data) => handleRadioInputChange(data.name,data.value )} />  
       </Form.Field>
       <Form.Field>
         <Checkbox
           radio
           label='AMC'
-          name='checkboxRadioGroup'
-          value='this'
-          checked={formData.serviceFrequency === 'this'}
-          onChange={handleInputChange} />
+          name='serviceFrequency'
+          value='AMC'
+          checked={formData.serviceFrequency === 'AMC'}
+          onChange={(e, data) => handleRadioInputChange(data.name,data.value )} />  
       </Form.Field>
         <p></p>
         <Form.Field>
@@ -176,14 +191,18 @@ const SegmentExampleNestedSegments = () => {
           onChange={handleInputChange} />
         </Form.Field>
         <p></p>
-        <Form.Field>
-       Renewal: 
+      <Form.Field>
+       Reneval: 
       </Form.Field>
       <Form.Field>
         <Checkbox
-          label='Renewal'
+          label='Reneval'
+          name='Reneval'
+          value='renewal'
           checked={formData.renewal}
-          onChange={handleInputChange} />
+          //checked={formData.renewal === 'Quarterly'}
+          onChange={(e, data) => handleRadioInputChange(data.name,!data.value )} />  
+         
       </Form.Field>
         <p></p>
         <Form.Field>
@@ -213,13 +232,22 @@ const SegmentExampleNestedSegments = () => {
           onChange={handleInputChange}/>
         </Form.Field>
         <div style={{ display: 'flex' }}>
-        <a href="/buyer/home/home">
-          <Button color="primary" style={{ marginLeft: 'auto' }}>
+        
+          <Button primary style={{ marginLeft: 'auto' }}>
             Submit
           </Button>
-        </a>
+       
         </div>
         </Form>
+        <Modal open={showModal} onClose={closeModal}>
+        <Modal.Header>Response</Modal.Header>
+        <Modal.Content>
+          <p>{responseText}</p>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={closeModal}>Close</Button>
+        </Modal.Actions>
+      </Modal>
       </Segment>
     </Segment.Group>
   </Segment.Group>
