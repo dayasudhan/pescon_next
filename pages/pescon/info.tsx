@@ -2,7 +2,7 @@ import React , { useState, useEffect } from 'react';
 import { Table,Button,Container, Divider, Grid, Header, Image,Segment } from 'semantic-ui-react';
 
 import axios from 'axios';
-function dataInfoPage() {
+function CustomerInfoPage() {
   const [data, setData] = useState(null);
   const [id, setId] = useState(0);
   useEffect(() => {
@@ -131,4 +131,4 @@ Your contact terms and requirement for the treatment as mentioned overleaf. (Ple
   
 }
 
-export default dataInfoPage;
+export default CustomerInfoPage ;
