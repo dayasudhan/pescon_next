@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Table,Button,Input,Segment ,Header} from 'semantic-ui-react';
+import { Table,Button,Input,Segment ,Header,Dropdown} from 'semantic-ui-react';
 
 //import './table.css'
 function CustomerListComponent() {
@@ -8,6 +8,7 @@ function CustomerListComponent() {
   const [expandedRowIndex, setExpandedRowIndex] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData, setFilteredData] = useState(data);
+  const [searchKey, setSearchKey] = useState('name');
   useEffect(() => {
     axios.get('/leads')
       .then(response => {
@@ -36,25 +37,49 @@ function CustomerListComponent() {
 
     //Filter the data based on the search query
     const filteredResults = data.filter((item) =>
-      item?.name?.toLowerCase().includes(value.toLowerCase())
+      item?.[searchKey]?.toLowerCase().includes(value.toLowerCase())
     );
 
       setFilteredData(filteredResults);
   };
+  const handleDropdownChange = (event, data) => {
+    // 'data.value' contains the selected value
+    console.log('handleDropdownChange:Selected Value:', data.value);
+    setSearchKey(data.value)
 
+  };
+  const searchOptions = [
+    { key: 1, text: 'Name', value: 'name' },
+    { key: 2, text: 'Id', value: 'id' },
+    { key: 3, text: 'City', value: 'city' },
+    { key: 4, text: 'Phone', value: 'phone' },
+  ]
+  
   return (
     <div>
      
  
-     <Header as='h2' floated='right'>
-      Customer Table
-    </Header>
-    <Input
+     <Segment heading>
+    
+   
+       <Dropdown 
+       placeholder='Search Key' 
+       search 
+       selection 
+       defaultValue={searchKey}
+       options={searchOptions} 
+       onChange={handleDropdownChange}
+       />
+       <Input
         icon="search"
         placeholder="Search..."
         value={searchQuery}
         onChange={handleSearchChange}
       />
+       <Header as='h2' floated='right'>
+      Customer Table
+    </Header>
+  </Segment>
  
 
     <Table celled striped>
