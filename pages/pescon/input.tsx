@@ -21,7 +21,6 @@ const SegmentExampleNestedSegments = () => {
     serviceFrequency:'Monthly',
     propertyType:'Commercial',
     reneval:false,
-    pestsToBeControlled:"",
     paymentTerms:"",
     billingInstructions:""
   });
@@ -204,10 +203,10 @@ const SegmentExampleNestedSegments = () => {
         <p></p>
         <Form.Field>
           <label>Pests to be Controlled</label>
-          <TextArea name="pestsToBeControlled"
+          <TextArea name="pestsToControl"
           rows={2} 
           placeholder='Describe...' 
-          value={formData.pestsToBeControlled} 
+          value={formData.pestsToControl} 
           onChange={handleInputChange}/>
         </Form.Field>
         <p></p>
