@@ -101,7 +101,7 @@ function CustomerListComponent() {
             <Table.Cell>{item.phone}</Table.Cell>
             <Table.Cell>{item.email}</Table.Cell>
             <Table.Cell>
-              <Button primary onClick={() => handleDetailButtonClick(item._id)}>Detail</Button>
+              <Button primary onClick={() => handleDetailButtonClick(item._id)}>Aggrement</Button>
             </Table.Cell> {/* Add a button to each row */}
           </Table.Row>
           {expandedRowIndex === index && (
