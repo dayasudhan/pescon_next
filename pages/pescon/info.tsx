@@ -4,12 +4,12 @@ import { Table,Button,Container, Divider, Grid, Header, Image,Segment } from 'se
 import axios from 'axios';
 function CustomerInfoPage() {
   const [data, setData] = useState(null);
-  const [id, setId] = useState(0);
+  const [id, setId] = useState('');
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const id = searchParams.get('id');
     console.log('id:', id);
-    setId(parseInt(id))
+    setId(id)
     const newPageUrl = '/leads/' + id;
     axios.get(newPageUrl)
     .then(response => {
@@ -20,13 +20,25 @@ function CustomerInfoPage() {
       console.log(error);
     });
   });
+  const handlePdfItemClick = (e, { name ,href}) => {
+    console.log("handlePdfItemClick")
 
+    console.log('handlePdfItemClick id:', id);
+    axios.get('/pdf?id='+id)
+    .then(response => {
+      console.log("response",response.data);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  };
     return (
       <div className="contract-container">
-
-      <Header as='h2' content='Pest Control Service Contract'  textAlign='center' />
-
+ 
       
+      <Button onClick={handlePdfItemClick}>Download</Button>
+      
+      <Header as='h2' content='Pest Control Service Contract'  textAlign='center' />
     <Grid container columns={2} stackable>
       <Grid.Column>
         <Segment> <div className="grid-item">
