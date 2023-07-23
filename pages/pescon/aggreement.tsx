@@ -2,7 +2,7 @@ import React , { useState, useEffect } from 'react';
 import { Table,Button,Container, Divider, Grid, Header, Image,Segment } from 'semantic-ui-react';
 
 import axios from 'axios';
-function CustomerInfoPage() {
+function CustomerInfoPage({hideButton}) {
   const [data, setData] = useState(null);
   const [id, setId] = useState('');
   useEffect(() => {
@@ -36,7 +36,7 @@ function CustomerInfoPage() {
       <div className="contract-container">
  
       
-      <Button onClick={handlePdfItemClick}>Download</Button>
+      {!hideButton && <Button onClick={handlePdfItemClick}>Download</Button>}
       
       <Header as='h2' content='Pest Control Service Contract'  textAlign='center' />
     <Grid container columns={2} stackable>

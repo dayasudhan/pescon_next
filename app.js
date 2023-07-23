@@ -115,7 +115,7 @@ const app = express()
   app.get('/pdf', async (req, res) => {
     try {
       console.log("req.query.id",req.query.id)
-      generatePDF(req.query.id)
+      generatePDF(req.query.id,`${req.protocol}://${req.get('host')}`)
     } catch (error) {
       console.error('Error retrieving users from MongoDB:', error);
       res.sendStatus(500);
@@ -134,7 +134,7 @@ const app = express()
     const downloadFolderPath = path.join(homeDir, 'Downloads');
     return downloadFolderPath;
   };
-  async function generatePDF(id) {
+  async function generatePDF(id,host) {
     const downloadPath = getWindowsDownloadFolderPath();
     const outputpath = `${downloadPath}\\leads_${id}.pdf`;
     console.log("generatePDF 0000 .................")
@@ -147,8 +147,8 @@ const app = express()
       preferCSSPageSize: true,
     }
   
-    let url = 'http://localhost:3000/agreement/?id=' +id;
-    console.log("url",url,)
+    let url = `${host}/agreementprint/?id=` +id;
+    console.log("url",url)
     await page.goto(url); // Replace with the URL or HTML content you want to generate PDF from
   
     await page.pdf({
