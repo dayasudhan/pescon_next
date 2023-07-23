@@ -147,7 +147,7 @@ const app = express()
       preferCSSPageSize: true,
     }
   
-    let url = 'http://localhost:3000/info/?id=' +id;
+    let url = 'http://localhost:3000/agreement/?id=' +id;
     console.log("url",url,)
     await page.goto(url); // Replace with the URL or HTML content you want to generate PDF from
   

@@ -7,7 +7,7 @@ export default class Header extends React.Component {
     activeItem: 'home' ,
     homelistrefLink: '/homelist',
     homerefLink: '/home',
-    inforefLink: '/info'
+    inforefLink: '/agreement'
 };
 
   handleItemClick = (e, { name ,href}) => {

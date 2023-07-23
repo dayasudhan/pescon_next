@@ -5,7 +5,7 @@ import Header from './landing/header';
 import Header2 from './landing/header2';
 import Footer from './landing/footer';
 import 'semantic-ui-css/semantic.css';
-import Info from './pescon/info';
+import Info from './pescon/aggreement';
 
 export default class HomeList extends Component {
   render() {

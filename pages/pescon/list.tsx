@@ -24,7 +24,7 @@ function CustomerListComponent() {
     // Make API call using fetch
    console.log("handleDetailButtonClick",id)
    const queryString = `?id=${id}`;
-   const newPageUrl = '/info' + queryString;
+   const newPageUrl = '/agreement' + queryString;
    window.open(newPageUrl, '_blank');
   };
   const handleRowClick = (index) => {
