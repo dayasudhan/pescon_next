@@ -20,24 +20,24 @@ function CustomerInfoPage() {
     .catch(error => {
       console.log(error);
     });
-  }, []);
+  });
   const customer = {
     name: data?.name,
     phone: data?.phone,
-    address: '123 Main St, City, State',
-    contactPerson: 'Jane Smith',
-    contactPhone: '987-654-3210',
-    propertyType: 'Commercial',
-    serviceBeginDate: '2023-06-01',
-    serviceExpirationDate: '2024-05-31',
-    renewal: 'Yes',
-    serviceType: 'Monthly',
-    pestsToControl: 'Ants, Cockroaches, Rodents',
-    paymentTerms: 'Net 30 Days',
-    billingInstructions: 'Send invoices via email',
-    signatoryName: 'John Doe',
-    signatoryDesignation: 'Owner',
-    customerSignature: 'John Doe',
+    address: data?.address,
+    personToContact: data?.personToContact,
+    personToContactPhone: data?.personToContactPhone,
+    propertyType: data?.propertyType,
+    serviceBeginDate: data?.serviceBeginDate,
+    serviceExpirationDate: data?.serviceExpirationDate,
+    reneval: data?.reneval,
+    serviceFrequency: data?.serviceFrequency,
+    pestsToControl: data?.pestsToControl,
+    paymentTerms: data?.paymentTerms,
+    billingInstructions: data?.billingInstructions,
+    signatoryName: data?.signatoryName,
+    signatoryDesignation: data?.signatoryDesignation,
+    customerSignature: data?.customerSignature,
   };
   const handleButtonClick = () => {
     // Make API call using fetch
@@ -64,8 +64,8 @@ function CustomerInfoPage() {
           <p><strong>Name:</strong> {customer.name}</p>
           <p><strong>Phone:</strong> {customer.phone}</p>
           <p><strong>Address:</strong> {customer.address}</p>
-          <p><strong>Contact Person:</strong> {customer.contactPerson}</p>
-          <p><strong>Contact Phone:</strong> {customer.contactPhone}</p>
+          <p><strong>Contact Person:</strong> {customer.personToContact}</p>
+          <p><strong>Contact Phone:</strong> {customer.personToContactPhone}</p>
           
         </div></Segment>
       </Grid.Column>
@@ -75,8 +75,8 @@ function CustomerInfoPage() {
           <p><strong>PESCON - Pest Control Services</strong></p>
           <p><strong>Address:</strong> Rashmi Arcade , Opp Lakshmi Theater</p>
           <p><strong></strong> Jail Road, Shivamogga -577201</p>
-          <p><strong>Contact Phone:</strong> {customer.contactPhone}</p>
-          {/* <p><strong>Secondary Phone:</strong> {customer.contactPhone}</p> */}
+          <p><strong>Contact Phone:</strong> {customer.personToContactPhone}</p>
+          {/* <p><strong>Secondary Phone:</strong> {customer.personToContactPhone}</p> */}
         </div></Segment>
       </Grid.Column>
       <Grid.Column>
@@ -98,19 +98,16 @@ function CustomerInfoPage() {
           <h3>Service Details</h3>
           <p><strong>Service Begin Date:</strong> {customer.serviceBeginDate}</p>
           <p><strong>Service Expiration Date:</strong> {customer.serviceExpirationDate}</p>
-          <p><strong>Renewal:</strong> {customer.renewal}</p>
-          <p><strong>Service Type:</strong> {customer.serviceType}</p>
+          <p><strong>Reneval:</strong> {customer.reneval}</p>
+          <p><strong>Service Type:</strong> {customer.serviceFrequency}</p>
           <p><strong>Other:</strong> {customer.otherservicedetails}</p>
         </div></Segment>
       </Grid.Column>
       <Grid.Column>
       <Segment> <div className="grid-item">
           <h3>Pests to be controlled</h3>
-          <p><strong>Service Begin Date:</strong> {customer.serviceBeginDate}</p>
-          <p><strong>Service Expiration Date:</strong> {customer.serviceExpirationDate}</p>
-          <p><strong>Renewal:</strong> {customer.renewal}</p>
-          <p><strong>Service Type:</strong> {customer.serviceType}</p>
-          <p><strong>Other:</strong> {customer.otherservicedetails}</p>
+          <p>{customer.pestsToControl} <br/>
+          </p>
         </div></Segment>
       </Grid.Column>
      
@@ -119,7 +116,7 @@ function CustomerInfoPage() {
     <Grid.Column>
         <Segment> <div className="grid-item">
           <h3>Payment Terms</h3>
-          <p>Rs 18000 (for  level of services) Major soil treatment, Compound level and Plumbing and electrical spray <br/>
+          <p>{customer.paymentTerms} <br/>
           </p>
         
          
@@ -128,10 +125,8 @@ function CustomerInfoPage() {
       <Grid.Column>
       <Segment> <div className="grid-item">
           <h3>Billing Instructions</h3>
-          <p>For Major soil treatment Rs 10000<br/>
-          For Compound treatment Rs 40000 <br/>
-          For Spraying treatment Rs 50000</p>
-          
+          <p>{customer.billingInstructions} <br/>
+          </p>
         </div></Segment>
       </Grid.Column>
       </Grid>
