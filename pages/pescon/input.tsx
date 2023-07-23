@@ -1,128 +1,256 @@
-import React, { useState } from 'react';
-import { Form, Input, TextArea, Select, Button,Checkbox  } from 'semantic-ui-react';
-// import './PestControlForm.css';
+import React, { useState ,useRef , useEffect } from 'react'
+import axios from 'axios';
+import { Segment, Input, Form, Button ,Checkbox,TextArea,Modal } from 'semantic-ui-react';
 
-function PestControlForm() {
+const SegmentExampleNestedSegments = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [responseText, setResponseText] = useState('');
+  const formRef = useRef(null);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     address: "",
     email: "",
+    landMark:"",
+    city:"",
     personToContact: "",
     personToContactPhone: "",
-    serviceBeginDate: "",
-    serviceExpirationDate: "",
-    pestsToControl: [],
+    serviceBeginDate: '',
+    serviceExpirationDate: '',
+    pestsToControl: '',
+    serviceFrequency:'Monthly',
+    propertyType:'Commercial',
+    reneval:false,
+    pestsToBeControlled:"",
+    paymentTerms:"",
+    billingInstructions:""
   });
 
   const handleInputChange = (event) => {
+    console.log("event",event.target)
     const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+  const handleRadioInputChange = (name,value) => {
+    console.log("handleRadioInputChange",name,value)
     setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(formData);
-  };
-
-  const [serviceOptions] = useState([
-    { key: "ants", value: "ants", text: "Ants" },
-    { key: "bedbugs", value: "bedbugs", text: "Bed Bugs" },
-    { key: "cockroaches", value: "cockroaches", text: "Cockroaches" },
-    { key: "termites", value: "termites", text: "Termites" },
-    { key: "rodents", value: "rodents", text: "Rodents" },
-  ]);
-  const handleServiceChange = (_, { value }) => {
-    setFormData({ ...formData, pestsToControl: value });
+    console.log("name",name)
+    event.preventDefault()
+    console.log("formData",formData)
+    axios.post('/leads', formData)
+    .then(response => {
+      console.log("response1",response);
+      console.log("response2",response?.data?.insertedId);
+      setTimeout(() => {
+        setResponseText(`Customer Inserted With Id : ${response?.data?.insertedId}`); // Set the response text to be shown in the modal
+        setShowModal(true); // Show the modal
+      }, 1000); // Delay of 1 second
+    })
+    .catch(error => {
+      console.error("error",error);
+    });
+  }
+  const closeModal = () => {
+    setShowModal(false);
+    setResponseText('');
+    if (formRef.current) {
+      formRef.current.reset(); // Reset the form fields to their initial values
+    }
   };
   return (
-    <div className="pest-control-form">
-      <h1>Pest Control Service Contract Input Form</h1>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group widths="equal">
-          <Form.Field>
-            <label>Name</label>
-            <Input name="name" placeholder="Name" value={formData.name} onChange={handleInputChange} />
-            </Form.Field>
-         
-          <Form.Field>
-            <label>Address :</label>
-            <TextArea n
-            ame="address" 
-            placeholder="Address" 
-            value={formData.address} 
-            onChange={handleInputChange}
-            rows={4}
-            cols={40} />
-          </Form.Field>
-        </Form.Group>
-        <Form.Group widths="equal">
-          <Form.Field>
-            <label>Phone</label>
-            <Input name="phone" placeholder="Phone" value={formData.phone} onChange={handleInputChange} />
-          </Form.Field>
-          <Form.Field>
-            <label>Email</label>
-            <Input name="email" placeholder="Email" type="email" value={formData.name} onChange={handleInputChange} />
-          </Form.Field>
-        </Form.Group>
-        {/* <Form.Field>
-          <label>Service</label>
-          <Select name="service" options={services} placeholder="Select Service" value={formData.service} onChange={(e, { value }) => setFormData({ ...formData, service: value })} />
-        </Form.Field> */}
-        <Form.Group widths="equal">
-          <Form.Field>
-            <label>Start Date</label>
-            <Input name="startDate" type="date" value={formData.serviceBeginDate} onChange={handleInputChange} />
-          </Form.Field>
-          <Form.Field>
-            <label>End Date</label>
-            <Input name="endDate" type="date" value={formData.serviceExpirationDate} onChange={handleInputChange} />
-          </Form.Field>
-        </Form.Group>
-
-          <Form.Field>
-          <label>Pests to Control</label>
-          <Checkbox
-            label="Ants"
-            name="pestsToControl"
-            value="ants"
-            onChange={handleServiceChange}
-            checked={formData.pestsToControl.includes("ants")}
-          />
-          <Checkbox
-            label="Bed Bugs"
-            name="pestsToControl"
-            value="bedbugs"
-            onChange={handleServiceChange}
-            checked={formData.pestsToControl.includes("bedbugs")}
-          />
-          <Checkbox
-            label="Cockroaches"
-            name="pestsToControl"
-            value="cockroaches"
-            onChange={handleServiceChange}
-            checked={formData.pestsToControl.includes("cockroaches")}
-            />
-             <Checkbox
-            label="termites"
-            name="pestsToControl"
-            value="termites"
-            onChange={handleServiceChange}
-            checked={formData.pestsToControl.includes("termites")}
-            />
-             <Checkbox
-            label="rodents"
-            name="pestsToControl"
-            value="rodents"
-            onChange={handleServiceChange}
-            checked={formData.pestsToControl.includes("rodents")}
-            />
+  <Segment.Group>
+    <Segment.Group horizontal>
+      <Segment>
+      <Segment textAlign='center'> <h3>Service Contract Input Form</h3></Segment>
+        <p></p>{' '}
+        <Form ref={formRef} onSubmit={handleSubmit}>
+        <Form.Field>
+        <label>Customer Details</label>
+        <Input name="name" 
+          focus placeholder="Name..."
+          value={formData.name} 
+          onChange={handleInputChange} />
         </Form.Field>
-        <Button type="submit">Submit</Button>
-      </Form>
-    </div>
-  );
-}
+        <p></p>
+        <Form.Field>
+          <Input name="phone"
+           focus placeholder="Phone Number"
+           value={formData.phone} 
+           onChange={handleInputChange} />
+        </Form.Field>
+        <p></p>
+        <Form.Field>
+          <Input name="landMark"
+          focus placeholder="Land Mark..." 
+          value={formData.landMark} 
+          onChange={handleInputChange}
+          />
+        </Form.Field>
+        <p></p>
+        <Form.Field>
+          <Input name="city"
+          focus placeholder="Village/City..." 
+          value={formData.city} 
+          onChange={handleInputChange}
+          />
+          </Form.Field>
+        <p></p>
+        <Form.Field>
+          <Input name="address"
+          focus placeholder="Address..." 
+          value={formData.address} 
+          onChange={handleInputChange}
+          />
+        </Form.Field>
+        <p></p>
+        <Form.Field>
+          <label>Person To be Contacted</label>
+        <Input name="personToContact" 
+          focus placeholder="Contact name..."
+          value={formData.personToContact} 
+          onChange={handleInputChange} />
+        </Form.Field>
+        <p></p>
+        <Form.Field>
+          <Input name="personToContactPhone"
+           focus placeholder="Phone Number"
+           value={formData.personToContactPhone} 
+           onChange={handleInputChange} />
+        </Form.Field>
+        <p></p>
+        <Form.Field>
+        Property to be serviced: <b>{formData.propertyType}</b>
+      </Form.Field>
+      <Form.Field>
+        <Checkbox
+          radio
+          label='Commercial'
+          name='propertyType'
+          value='Commercial'
+          checked={formData.propertyType === 'Commercial'}
+          onChange={(e, data) => handleRadioInputChange(data.name,data.value )} /> 
+      </Form.Field>
+      <Form.Field>
+        <Checkbox
+          radio
+          label='Residential'
+          name='propertyType'
+          value='Residential'
+          checked={formData.propertyType === 'Residential'}
+          onChange={handleInputChange} />  
+      </Form.Field>
+        <p></p>
+        <Form.Field>
+        Service Frequeny: <b>{formData.serviceFrequency}</b>
+      </Form.Field>
+      <Form.Field>
+        <Checkbox
+          radio
+          label='Monthly'
+          name='serviceFrequency'
+          value='Monthly'
+          checked={formData.serviceFrequency === 'Monthly'}
+          onChange={(e, data) => handleRadioInputChange(data.name,data.value )} /> 
+      </Form.Field>
+      <Form.Field>
+        <Checkbox
+          radio
+          label='Quarterly'
+          name='serviceFrequency'
+          value='Quarterly'
+          checked={formData.serviceFrequency === 'Quarterly'}
+          onChange={(e, data) => handleRadioInputChange(data.name,data.value )} />  
+      </Form.Field>
+      <Form.Field>
+        <Checkbox
+          radio
+          label='AMC'
+          name='serviceFrequency'
+          value='AMC'
+          checked={formData.serviceFrequency === 'AMC'}
+          onChange={(e, data) => handleRadioInputChange(data.name,data.value )} />  
+      </Form.Field>
+        <p></p>
+        <Form.Field>
+          <label>Service Start Date</label>
+          <Input name="serviceBeginDate" 
+            type="date"
+            focus placeholder="Start Date" 
+            value={formData.serviceBeginDate} 
+            onChange={handleInputChange} />
+        </Form.Field>
+        <p></p>
+        <Form.Field>
+          <label>Service End Date</label>
+          <Input name="serviceExpirationDate" 
+          type="date" 
+          value={formData.serviceExpirationDate} 
+          onChange={handleInputChange} />
+        </Form.Field>
+        <p></p>
+      <Form.Field>
+       Reneval: 
+      </Form.Field>
+      <Form.Field>
+        <Checkbox
+          label='Reneval'
+          name='Reneval'
+          value='renewal'
+          checked={formData.renewal}
+          //checked={formData.renewal === 'Quarterly'}
+          onChange={(e, data) => handleRadioInputChange(data.name,!data.value )} />  
+         
+      </Form.Field>
+        <p></p>
+        <Form.Field>
+          <label>Pests to be Controlled</label>
+          <TextArea name="pestsToBeControlled"
+          rows={2} 
+          placeholder='Describe...' 
+          value={formData.pestsToBeControlled} 
+          onChange={handleInputChange}/>
+        </Form.Field>
+        <p></p>
+        <Form.Field>
+          <label>Payment Terms</label>
+          <TextArea name="paymentTerms"
+          rows={2} 
+          placeholder='Describe...' 
+          value={formData.paymentTerms} 
+          onChange={handleInputChange}/>
+        </Form.Field>
+        <p></p>
+        <Form.Field>
+          <label>Billing Instructions </label>
+          <TextArea name='billingInstructions'
+          rows={2} 
+          placeholder='Describe...' 
+          value={formData.billingInstructions} 
+          onChange={handleInputChange}/>
+        </Form.Field>
+        <div style={{ display: 'flex' }}>
+        
+          <Button primary style={{ marginLeft: 'auto' }}>
+            Submit
+          </Button>
+       
+        </div>
+        </Form>
+        <Modal open={showModal} onClose={closeModal}>
+        <Modal.Header>Response</Modal.Header>
+        <Modal.Content>
+          <p>{responseText}</p>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={closeModal}>Close</Button>
+        </Modal.Actions>
+      </Modal>
+      </Segment>
+    </Segment.Group>
+  </Segment.Group>
+)};
 
-export default PestControlForm;
+export default SegmentExampleNestedSegments;

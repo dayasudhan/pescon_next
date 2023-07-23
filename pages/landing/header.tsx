@@ -5,7 +5,7 @@ export default class Header extends React.Component {
   
   state = { 
     activeItem: 'home' ,
-    homelistrefLink: '/homelist',
+    homelistrefLink: '/list',
     homerefLink: '/home',
     inforefLink: '/agreement'
 };
