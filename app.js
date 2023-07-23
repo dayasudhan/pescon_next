@@ -138,7 +138,7 @@ const app = express()
     const downloadPath = getWindowsDownloadFolderPath();
     const outputpath = `${downloadPath}\\leads_${id}.pdf`;
     console.log("generatePDF 0000 .................")
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({headless: false,});
     const page = await browser.newPage();
     const pageopts ={
       format: 'letter',
@@ -150,11 +150,22 @@ const app = express()
     let url = `${host}/agreementprint/?id=` +id;
     console.log("url",url)
     await page.goto(url); // Replace with the URL or HTML content you want to generate PDF from
-  
+    
     await page.pdf({
       path: outputpath, // Specify the path where the PDF file will be saved
       format: 'A4' // Specify the page format (e.g., 'A4', 'Letter', etc.)
     });
-    console.log(`generatePDF 123 ${outputpath} `)
+  //   const dynamicContentSelector = '.dynamic-content';
+  //   await page.waitForSelector(dynamicContentSelector);
+  //   console.log(`generatePDF 123 ${outputpath} `)
+  //   // Now you can interact with the element
+  // const dynamicContentElement = await page.$(dynamicContentSelector);
+  // if (dynamicContentElement) {
+  //   const dynamicContentText = await page.evaluate(element => element.textContent, dynamicContentElement);
+  //   console.log('Dynamic Content:', dynamicContentText);
+  // } else {
+  //   console.log('Element not found.');
+  // }
+
     await browser.close();
   }

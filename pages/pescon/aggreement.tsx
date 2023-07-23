@@ -10,15 +10,18 @@ function CustomerInfoPage({hideButton}) {
     const id = searchParams.get('id');
     console.log('id:', id);
     setId(id)
-    const newPageUrl = '/leads/' + id;
-    axios.get(newPageUrl)
-    .then(response => {
-      setData(response.data);
-      console.log("data",data)
-    })
-    .catch(error => {
-      console.log(error);
-    });
+    if(!data)
+    {
+      const newPageUrl = '/leads/' + id;
+      axios.get(newPageUrl)
+      .then(response => {
+        setData(response.data);
+        console.log("data",data)
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    }
   });
   const handlePdfItemClick = (e, { name ,href}) => {
     console.log("handlePdfItemClick")
