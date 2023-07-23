@@ -1,35 +1,20 @@
 import React, { Component } from 'react';
 import { Menu, Input } from 'semantic-ui-react';
-// import { Router   } from 'next/router';
-import axios from 'axios';
+
 export default class Header extends React.Component {
   
   state = { 
     activeItem: 'home' ,
-    homelistrefLink: '/homelist',
+    homelistrefLink: '/list',
     homerefLink: '/home',
-    inforefLink: '/info'
+    inforefLink: '/agreement'
 };
-  //router = useRouter();
+
   handleItemClick = (e, { name ,href}) => {
-    //const { router } = Router;
     this.setState({ activeItem: name })
     this.setState({ refLink: href });
-    //router.push('/pescon/list');
 };
-handlePdfItemClick = (e, { name ,href}) => {
-  console.log("handlePdfItemClick")
-  const searchParams = new URLSearchParams(window.location.search);
-  const id = searchParams.get('id');
-  console.log('id:', id);
-  axios.get('/leads/pdf?id='+id)
-  .then(response => {
-    console.log("response",response.data);
-  })
-  .catch(error => {
-    console.log(error);
-  });
-};
+
   render() {
     const { activeItem,homelistrefLink,homerefLink,inforefLink } = this.state;
 
@@ -47,34 +32,12 @@ handlePdfItemClick = (e, { name ,href}) => {
           href={homelistrefLink}
           onClick={this.handleItemClick}
         />
-        <Menu.Item
+        {/* <Menu.Item
           name="CustoMer Detail"
           href={inforefLink}
           active={activeItem === 'plants'}
           onClick={this.handleItemClick}
-        />
-        <Menu.Menu position="right">
-          <Menu.Item>
-            <Input icon="search" placeholder="Search..." />
-          </Menu.Item>
-        </Menu.Menu>
-        <Menu.Item
-            name="PDF"
-            active={activeItem === 'Register'}
-            onClick={this.handlePdfItemClick}
-          />
-        {/* <Menu.Menu position="right">
-          <Menu.Item
-            name="Register"
-            active={activeItem === 'Register'}
-            onClick={this.handleItemClick}
-          />
-          <Menu.Item
-            name="login"
-            active={activeItem === 'login'}
-            onClick={this.handleItemClick}
-          />
-        </Menu.Menu> */}
+        /> */}
       </Menu>
     );
   }
