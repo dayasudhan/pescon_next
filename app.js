@@ -125,7 +125,7 @@ const app = express()
   app.get('*', (req, res) => {
     return handle(req, res)
   })
-  app.listen(3000, (err) => {
+  app.listen(4000, (err) => {
     if (err) throw err
     console.log(`Server is listening on port ${process.env.NODE_ENV} `)
   })
