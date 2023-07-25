@@ -1,20 +1,37 @@
 import { useContext } from 'react';
 import { AuthContext } from './authContext';
 import GoogleSignInButton from './GoogleSignInButton';
+//import { Image } from 'semantic-ui-react'
+import Image from 'next/image';
+import Home from './home.tsx';
 const Index = () => {
   const { user } = useContext(AuthContext);
 
   return (
     <div>
+      <h1>Pescon</h1>
+      <Image
+        src="/images/logo1.png"
+        alt="Your Image"
+        width={100}
+        height={100}
+      />
       {user ? (
         <div>
           <h1>Welcome, {user.displayName}!</h1>
-          <p>Email: {user.email}</p>
-          <p>Profile Picture: <img src={user.photoURL} alt="Profile" /></p>
+         
+         
+      {/* <Segment> */}
+        
+        <Home />
+        {/* <Footer /> */}
+      {/* </Segment> */}
+
+
         </div>
       ) : (
         <div>
-      <h1>Pescon</h1>
+
       <p>Please sign in using Google:</p>
       <GoogleSignInButton />
     </div>
