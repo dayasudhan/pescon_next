@@ -67,8 +67,16 @@ const app = express()
   });
   app.post('/leads',mongoMiddleware, async (req, res) => {
     try {
+      const counterCollection = req.db.collection('counter');
+      console.log("req.params.id",req.params.id)
+      const result = await counterCollection.findOneAndUpdate({ client: 'pescon' },  
+      { $inc: { sequence: 1 }});  
+      console.log("result",result.value.sequence);
+      req.body['id'] = 'P' + result.value.sequence;
+      console.log("result",req.body);
       const collection = req.db.collection('leads');
       const response = await collection.insertOne(req.body);
+      console.log("response",response)
       res.json(response);
     } catch (error) {
       console.error('Error retrieving leads from MongoDB:', error);
@@ -157,3 +165,14 @@ const app = express()
 
     await browser.close();
   }
+  // async function getNextSequence(name,result)
+  // {
+ 
+  //     const userId = req.params.id;
+  //     const updatedFields = req.body;
+  //     const collection = req.db.collection('counter');
+  //     console.log("req.params.id",req.params.id)
+  //     const result = await collection.updateOne({ name: 'pescon' },
+  //     { $inc: { sequence: 1 }});    
+  //      return result
+  // }

@@ -6,8 +6,8 @@ class Middleware {
 		try {
 			const decodeValue = await admin.auth().verifyIdToken(token);
 			if (decodeValue) {
-                console.log("decodeValue",decodeValue);
-								console.log("email1",decodeValue.email);
+                // console.log("decodeValue",decodeValue);
+								// console.log("email1",decodeValue.email);
 								if (!allowedEmails.includes(decodeValue.email)) {
 									console.log("1")
 									//	const reslt = await admin.auth().deleteUser(user.uid);

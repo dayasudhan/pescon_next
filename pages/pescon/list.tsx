@@ -107,9 +107,9 @@ function CustomerListComponent() {
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell width={1}>#</Table.HeaderCell>
+          <Table.HeaderCell width={2}>Id</Table.HeaderCell>
           <Table.HeaderCell width={5}>Name</Table.HeaderCell>
           <Table.HeaderCell width={4}>Phone</Table.HeaderCell>
-          <Table.HeaderCell width={6}>Email</Table.HeaderCell>
           <Table.HeaderCell width={1}></Table.HeaderCell>
         </Table.Row>
       </Table.Header>
@@ -118,9 +118,9 @@ function CustomerListComponent() {
           <React.Fragment key={item.id}>
           <Table.Row  onClick={() => handleRowClick(index)}>
             <Table.Cell>{index + 1}</Table.Cell>
+            <Table.Cell>{item.id}</Table.Cell>
             <Table.Cell>{item.name}</Table.Cell>
             <Table.Cell>{item.phone}</Table.Cell>
-            <Table.Cell>{item.email}</Table.Cell>
             <Table.Cell>
               <Button primary onClick={() => handleDetailButtonClick(item._id)}>Aggrement</Button>
             </Table.Cell> {/* Add a button to each row */}
