@@ -7,7 +7,7 @@ const {server,handle} = require('./server');
 const os = require('os');
 const path = require('path');
 const puppeteer = require('puppeteer');
-const middleware = require('./middleware/index');
+const googleOAuth = require('./middleware/index');
 
 
 
@@ -29,7 +29,7 @@ const app = express()
         }
   };
   app.get('/hello', (req, res) => res.send('Namaste Home Page'));
-  app.get('/leads/:id',mongoMiddleware, middleware.decodeToken,async(req, res) => 
+  app.get('/leads/:id',mongoMiddleware, googleOAuth.decodeToken,async(req, res) => 
   {
     console.log("req",req.params,req.url,req.params.id);
     try {
@@ -52,7 +52,7 @@ const app = express()
     console.log("close the monogdbclient")
     req.client.close();
   });
-  app.get('/leads',mongoMiddleware,middleware.decodeToken, async (req, res) => {
+  app.get('/leads',mongoMiddleware,googleOAuth.decodeToken, async (req, res) => {
     try {
       console.log("inside rides")
       const collection = req.db.collection('leads');
