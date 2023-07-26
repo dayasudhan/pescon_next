@@ -129,8 +129,7 @@ function CustomerListComponent() {
               <Table.Row>
                 <Table.Cell colSpan="4"> {/* colSpan should match the number of columns in your table */}
                   {/* Add your additional content here */}
-                  <p><b>ID</b>: &nbsp;  &nbsp;  &nbsp;{ item._id}</p>
-                  <p><b>_id</b>: {item._id}</p>
+                  <p><b>ID</b>: &nbsp;  &nbsp;  &nbsp;{ item.id}</p>
                   <p><b>name</b>: {item.name}</p>
                   <p><b>phone</b>: {item.phone}</p>
                   <p><b>address</b>: {item.address}</p>
