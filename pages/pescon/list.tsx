@@ -14,7 +14,8 @@ function CustomerListComponent() {
   useEffect(() => {
     console.log("user123",user)
     console.log("token123",token)
-    if(token)
+    console.log("data",data.length)
+    if(token && data.length == 0)
     {
     axios.get('/leads',{
       headers:{
