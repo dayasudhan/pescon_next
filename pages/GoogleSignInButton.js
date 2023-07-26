@@ -7,7 +7,7 @@ const GoogleSignInButton = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     try {
       await firebase.auth().signInWithPopup(provider);
-      
+      console.log("GoogleSignInButton")
     } catch (error) {
       console.error('Error signing in with Google:', error);
     }

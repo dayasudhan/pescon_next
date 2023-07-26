@@ -11,7 +11,7 @@ const Index = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     console.log("i am inside")
-    router.push('/home');
+    router.push('/list');
 
   };
   return (

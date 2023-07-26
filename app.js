@@ -7,8 +7,7 @@ const {server,handle} = require('./server');
 const os = require('os');
 const path = require('path');
 const puppeteer = require('puppeteer');
-//import * as puppeteer from 'puppeteer'
-//const handle = server.getRequestHandler()
+const middleware = require('./middleware/index');
 
 
 
@@ -30,7 +29,7 @@ const app = express()
         }
   };
   app.get('/hello', (req, res) => res.send('Namaste Home Page'));
-  app.get('/leads/:id',mongoMiddleware, async(req, res) => 
+  app.get('/leads/:id',mongoMiddleware, middleware.decodeToken,async(req, res) => 
   {
     console.log("req",req.params,req.url,req.params.id);
     try {
@@ -53,7 +52,7 @@ const app = express()
     console.log("close the monogdbclient")
     req.client.close();
   });
-  app.get('/leads',mongoMiddleware, async (req, res) => {
+  app.get('/leads',mongoMiddleware,middleware.decodeToken, async (req, res) => {
     try {
       console.log("inside rides")
       const collection = req.db.collection('leads');
@@ -125,7 +124,7 @@ const app = express()
   app.get('*', (req, res) => {
     return handle(req, res)
   })
-  app.listen(3000, (err) => {
+  app.listen(process.env.PORT, (err) => {
     if (err) throw err
     console.log(`Server is listening on port ${process.env.NODE_ENV} `)
   })
@@ -155,17 +154,6 @@ const app = express()
       path: outputpath, // Specify the path where the PDF file will be saved
       format: 'A4' // Specify the page format (e.g., 'A4', 'Letter', etc.)
     });
-  //   const dynamicContentSelector = '.dynamic-content';
-  //   await page.waitForSelector(dynamicContentSelector);
-  //   console.log(`generatePDF 123 ${outputpath} `)
-  //   // Now you can interact with the element
-  // const dynamicContentElement = await page.$(dynamicContentSelector);
-  // if (dynamicContentElement) {
-  //   const dynamicContentText = await page.evaluate(element => element.textContent, dynamicContentElement);
-  //   console.log('Dynamic Content:', dynamicContentText);
-  // } else {
-  //   console.log('Element not found.');
-  // }
 
     await browser.close();
   }
