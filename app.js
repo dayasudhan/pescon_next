@@ -8,8 +8,7 @@ const os = require('os');
 const path = require('path');
 const puppeteer = require('puppeteer');
 const googleOAuth = require('./middleware/index');
-
-
+const firebaseAdmin = require('./config/firebase-config')
 
 const app = express()
   app.use(express.json());
@@ -128,7 +127,33 @@ const app = express()
       res.sendStatus(500);
     }    
   });
+  async function  sendPushNotification(token, title, body) {
+    const topic = 'highScores';
+    const message = {
+      data: {
+        score: '850',
+        time: '2:45'
+      },
+      topic: topic
+    };
+    await firebaseAdmin
+      .messaging()
+      .send(message)
+      .then((response) => {
+        console.log('Successfully sent message:', response);
 
+      })
+      .catch((error) => {
+        console.error('Error sending message:', error);
+      });
+  }
+  app.get('/pn',  (req, res) => {
+    const userToken = 'your-device-token'; // The FCM token of the device you want to send the notification to
+    const notificationTitle = 'Hello';
+    const notificationBody = 'This is a push notification sent from Node.js';
+    sendPushNotification(userToken, notificationTitle, notificationBody);
+    res.json({ message: 'Protected route: Access granted!', user: req.user });
+  });
   app.get('*', (req, res) => {
     return handle(req, res)
   })
