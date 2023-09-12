@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import { Menu, Input } from 'semantic-ui-react';
-
+import { useContext } from 'react';
+import { AuthContext } from './../authContext';
+// interface IAuthContext {
+//   user: string | null;
+//   token: string | null;
+// }
 export default class Header extends React.Component {
-  
+  static contextType = AuthContext;
+  context!: React.ContextType<typeof AuthContext>;
   state = { 
     activeItem: 'home' ,
     homelistrefLink: '/list',
@@ -17,7 +23,7 @@ export default class Header extends React.Component {
 
   render() {
     const { activeItem,homelistrefLink,homerefLink,inforefLink } = this.state;
-
+    const { user, token } = this.context;
     return (
       <Menu inverted seconday pointing size="mini" color="blue">
         <Menu.Item
@@ -32,12 +38,10 @@ export default class Header extends React.Component {
           href={homelistrefLink}
           onClick={this.handleItemClick}
         />
-        {/* <Menu.Item
-          name="CustoMer Detail"
-          href={inforefLink}
-          active={activeItem === 'plants'}
-          onClick={this.handleItemClick}
-        /> */}
+        <Menu.Item position="right"
+          name={user?.displayName}
+         
+        />
       </Menu>
     );
   }

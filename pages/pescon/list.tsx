@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Table,Button,Input,Segment ,Header,Dropdown} from 'semantic-ui-react';
-
+import { useContext } from 'react';
+import { AuthContext } from './../authContext';
 //import './table.css'
 function CustomerListComponent() {
   const [data, setData] = useState([]);
@@ -9,16 +10,36 @@ function CustomerListComponent() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData, setFilteredData] = useState(data);
   const [searchKey, setSearchKey] = useState('name');
+  const { user,token } = useContext(AuthContext);
   useEffect(() => {
-    axios.get('/leads')
+    console.log("user123",user)
+    console.log("token123",token)
+    console.log("data",data.length)
+    if(token && data.length == 0)
+    {
+    axios.get('/leads',{
+      headers:{
+          'Authorization': `Bearer ${token}`
+      }
+      })
       .then(response => {
-        setData(response.data);
-        setFilteredData(response.data);
+        if(response.status != 401)
+        {
+          setData(response.data);
+          setFilteredData(response.data);
+        }
+        else
+        {
+          setData(null);
+          setFilteredData(null);
+        }
+          console.log(response);
       })
       .catch(error => {
         console.log(error);
       });
-  }, []);
+    }
+  });
 
   const  handleDetailButtonClick = (id) => {
     // Make API call using fetch
@@ -86,20 +107,20 @@ function CustomerListComponent() {
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell width={1}>#</Table.HeaderCell>
+          <Table.HeaderCell width={2}>Id</Table.HeaderCell>
           <Table.HeaderCell width={5}>Name</Table.HeaderCell>
           <Table.HeaderCell width={4}>Phone</Table.HeaderCell>
-          <Table.HeaderCell width={6}>Email</Table.HeaderCell>
           <Table.HeaderCell width={1}></Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {filteredData.map((item, index) => (
+        {filteredData && filteredData.map((item, index) => (
           <React.Fragment key={item.id}>
           <Table.Row  onClick={() => handleRowClick(index)}>
             <Table.Cell>{index + 1}</Table.Cell>
+            <Table.Cell>{item.id}</Table.Cell>
             <Table.Cell>{item.name}</Table.Cell>
             <Table.Cell>{item.phone}</Table.Cell>
-            <Table.Cell>{item.email}</Table.Cell>
             <Table.Cell>
               <Button primary onClick={() => handleDetailButtonClick(item._id)}>Aggrement</Button>
             </Table.Cell> {/* Add a button to each row */}
@@ -108,8 +129,7 @@ function CustomerListComponent() {
               <Table.Row>
                 <Table.Cell colSpan="4"> {/* colSpan should match the number of columns in your table */}
                   {/* Add your additional content here */}
-                  <p><b>ID</b>: &nbsp;  &nbsp;  &nbsp;{ item._id}</p>
-                  <p><b>_id</b>: {item._id}</p>
+                  <p><b>ID</b>: &nbsp;  &nbsp;  &nbsp;{ item.id}</p>
                   <p><b>name</b>: {item.name}</p>
                   <p><b>phone</b>: {item.phone}</p>
                   <p><b>address</b>: {item.address}</p>

@@ -7,10 +7,8 @@ const {server,handle} = require('./server');
 const os = require('os');
 const path = require('path');
 const puppeteer = require('puppeteer');
-//import * as puppeteer from 'puppeteer'
-//const handle = server.getRequestHandler()
-
-
+const googleOAuth = require('./middleware/index');
+const firebaseAdmin = require('./config/firebase-config')
 
 const app = express()
   app.use(express.json());
@@ -30,7 +28,7 @@ const app = express()
         }
   };
   app.get('/hello', (req, res) => res.send('Namaste Home Page'));
-  app.get('/leads/:id',mongoMiddleware, async(req, res) => 
+  app.get('/leads/:id',mongoMiddleware, googleOAuth.decodeToken,async(req, res) => 
   {
     console.log("req",req.params,req.url,req.params.id);
     try {
@@ -53,7 +51,7 @@ const app = express()
     console.log("close the monogdbclient")
     req.client.close();
   });
-  app.get('/leads',mongoMiddleware, async (req, res) => {
+  app.get('/leads',mongoMiddleware,googleOAuth.decodeToken, async (req, res) => {
     try {
       console.log("inside rides")
       const collection = req.db.collection('leads');
@@ -68,8 +66,16 @@ const app = express()
   });
   app.post('/leads',mongoMiddleware, async (req, res) => {
     try {
+      const counterCollection = req.db.collection('counter');
+      console.log("req.params.id",req.params.id)
+      const result = await counterCollection.findOneAndUpdate({ client: 'pescon' },  
+      { $inc: { sequence: 1 }});  
+      console.log("result",result.value.sequence);
+      req.body['id'] = 'P' + result.value.sequence;
+      console.log("result",req.body);
       const collection = req.db.collection('leads');
       const response = await collection.insertOne(req.body);
+      console.log("response",response)
       res.json(response);
     } catch (error) {
       console.error('Error retrieving leads from MongoDB:', error);
@@ -121,11 +127,37 @@ const app = express()
       res.sendStatus(500);
     }    
   });
+  async function  sendPushNotification(token, title, body) {
+    const topic = 'highScores';
+    const message = {
+      data: {
+        score: '850',
+        time: '2:45'
+      },
+      topic: topic
+    };
+    await firebaseAdmin
+      .messaging()
+      .send(message)
+      .then((response) => {
+        console.log('Successfully sent message:', response);
 
+      })
+      .catch((error) => {
+        console.error('Error sending message:', error);
+      });
+  }
+  app.get('/pn',  (req, res) => {
+    const userToken = 'your-device-token'; // The FCM token of the device you want to send the notification to
+    const notificationTitle = 'Hello';
+    const notificationBody = 'This is a push notification sent from Node.js';
+    sendPushNotification(userToken, notificationTitle, notificationBody);
+    res.json({ message: 'Protected route: Access granted!', user: req.user });
+  });
   app.get('*', (req, res) => {
     return handle(req, res)
   })
-  app.listen(3000, (err) => {
+  app.listen(process.env.PORT, (err) => {
     if (err) throw err
     console.log(`Server is listening on port ${process.env.NODE_ENV} `)
   })
@@ -155,17 +187,17 @@ const app = express()
       path: outputpath, // Specify the path where the PDF file will be saved
       format: 'A4' // Specify the page format (e.g., 'A4', 'Letter', etc.)
     });
-  //   const dynamicContentSelector = '.dynamic-content';
-  //   await page.waitForSelector(dynamicContentSelector);
-  //   console.log(`generatePDF 123 ${outputpath} `)
-  //   // Now you can interact with the element
-  // const dynamicContentElement = await page.$(dynamicContentSelector);
-  // if (dynamicContentElement) {
-  //   const dynamicContentText = await page.evaluate(element => element.textContent, dynamicContentElement);
-  //   console.log('Dynamic Content:', dynamicContentText);
-  // } else {
-  //   console.log('Element not found.');
-  // }
 
     await browser.close();
   }
+  // async function getNextSequence(name,result)
+  // {
+ 
+  //     const userId = req.params.id;
+  //     const updatedFields = req.body;
+  //     const collection = req.db.collection('counter');
+  //     console.log("req.params.id",req.params.id)
+  //     const result = await collection.updateOne({ name: 'pescon' },
+  //     { $inc: { sequence: 1 }});    
+  //      return result
+  // }
