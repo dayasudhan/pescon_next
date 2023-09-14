@@ -28,7 +28,7 @@ const app = express()
         }
   };
   app.get('/hello', (req, res) => res.send('Namaste Home Page'));
-  app.get('/leads/:id',mongoMiddleware, googleOAuth.decodeToken,async(req, res) => 
+  app.get('/leads/:id',mongoMiddleware, async(req, res) => 
   {
     console.log("req",req.params,req.url,req.params.id);
     try {
@@ -51,7 +51,7 @@ const app = express()
     console.log("close the monogdbclient")
     req.client.close();
   });
-  app.get('/leads',mongoMiddleware,googleOAuth.decodeToken, async (req, res) => {
+  app.get('/leads',mongoMiddleware, async (req, res) => {
     try {
       console.log("inside rides")
       const collection = req.db.collection('leads');
