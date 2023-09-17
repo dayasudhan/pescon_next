@@ -64,6 +64,46 @@ const app = express()
     console.log("close the monogdbclient")
     req.client.close();
   });
+  app.get('/enquiries',mongoMiddleware, async (req, res) => {
+    try {
+      console.log("inside rides")
+      const collection = req.db.collection('leads');
+      const rides = await collection.find().toArray();
+      console.log("rides",rides);
+      const enquiries = rides.filter(e=>{
+        if(!e.contract)
+        {
+          return true
+        }
+        else{
+          return e?.contract==false
+        }
+        })
+      console.log("enquiries",enquiries);
+      res.json(enquiries);
+    } catch (error) {
+      console.error('Error retrieving users from MongoDB:', error);
+      res.sendStatus(500);
+    }
+    console.log("close the monogdbclient")
+    req.client.close();
+  });
+  app.get('/contracts',mongoMiddleware, async (req, res) => {
+    try {
+      console.log("inside rides")
+      const collection = req.db.collection('leads');
+      const rides = await collection.find().toArray();
+      console.log("rides",rides);
+      const contracts = rides.filter(e=>e?.contract==true)
+      console.log("contracts",contracts);
+      res.json(contracts);
+    } catch (error) {
+      console.error('Error retrieving users from MongoDB:', error);
+      res.sendStatus(500);
+    }
+    console.log("close the monogdbclient")
+    req.client.close();
+  });
   app.post('/leads',mongoMiddleware, async (req, res) => {
     try {
       const counterCollection = req.db.collection('counter');
@@ -72,6 +112,7 @@ const app = express()
       { $inc: { sequence: 1 }});  
       console.log("result",result.value.sequence);
       req.body['id'] = 'P' + result.value.sequence;
+      req.body['contract'] = false;
       console.log("result",req.body);
       const collection = req.db.collection('leads');
       const response = await collection.insertOne(req.body);
@@ -107,6 +148,38 @@ const app = express()
       const result = await collection.updateOne({ _id: new ObjectId(req.params.id) },
       { $set: updatedFields });    
       if (result.matchedCount === 0) {
+        return res.status(404).json({ message: 'leads not found' });
+      }
+      
+      res.status(200).json({ message: 'Lead updated successfully' });
+    } catch (error) {
+      console.error('Error retrieving users from MongoDB:', error);
+      res.sendStatus(500);
+    }
+    req.client.close();
+  });
+  app.patch('/leads/servicehistory/:id',mongoMiddleware, async (req, res) => {
+    try {
+      const userId = req.params.id;
+      const updatedFields = req.body;
+      const collection = req.db.collection('leads');
+      console.log("req.params.id",req.params.id)
+      const objectId = new ObjectId(req.params.id);
+      const  result = await collection.findOne({ _id :objectId});
+      console.log("res",result?.serviceHistory)
+      if(!result?.serviceHistory)
+      {
+        console.log("empty");
+        const arr = [req.body.serviceHistory]
+        result['serviceHistory'] = arr;
+      }
+      else
+      {
+        result.serviceHistory.push(req.body.serviceHistory)
+      }
+      const result2 = await collection.updateOne({ _id: new ObjectId(req.params.id) },
+      { $set: { 'serviceHistory': result.serviceHistory }});    
+      if (result2.matchedCount === 0) {
         return res.status(404).json({ message: 'leads not found' });
       }
       
