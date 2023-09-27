@@ -2,7 +2,7 @@
 /dist
 /node_modules
 /.next
-/config/ServiceAccount.json
+/config
 # Logs
 logs
 *.log
