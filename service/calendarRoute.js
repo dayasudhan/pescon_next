@@ -40,66 +40,53 @@ async function handleCalendarRoute(req, res) {
     if (!result) {
       res.status(404).json({ message: 'Document not found' });
     }
-    const startDate = new Date('2023-09-15'); // Replace with your start date
-    const endDate = new Date('2023-12-27'); // Replace with your end date
+    const startDate = new Date(result.serviceBeginDate); // Replace with your start date
+    const endDate = new Date(result.serviceExpirationDate); // Replace with your end date
     
     // Call the function to log at the start of each month
     const dates = logStartOfMonthBetweenDates(startDate, endDate);
     console.log("dates",dates)
-    const eventList = dates.map(e=>{
-        return {
-            summary: `${result.id} - ${result.name}`,
-            location: `Landmark : ${result.land_mark} ,Address : ${result.address},City : ${result.city}` ,
-            description:  `Phone : ${result.phone} ,pestsToControl : ${result.pestsToControl},propertyType : ${result.propertyType}`,
-            start: {
-              dateTime: `${e}T10:00:00`,
-              timeZone: 'IST',
-            },
-            end: {
-              dateTime:  `${e}T12:00:00`,
-              timeZone: 'IST',
-            },
-          };
-     })
-            // const event = {
-            //     summary: `${result.id} + '-'+ ${result.name}`,
-            //     location: `Landmark : ${result.land_mark} ,Address : ${result.address},City : ${result.city}` ,
-            //     description:  `Phone : ${result.phone} ,'pestsToControl' : ${result.pestsToControl},'propertyType' : ${result.propertyType}`,
-            //     start: {
-            //       dateTime: `${e}T10:00:00`,
-            //       timeZone: 'IST',
-            //     },
-            //     end: {
-            //       dateTime:  `${e}T12:00:00`,
-            //       timeZone: 'IST',
-            //     },
-            //   };
- console.log("eventList",eventList)
+            const fr = `RRULE:FREQ=MONTHLY;COUNT=${dates.length}`;
+    
+            const event = {
+                summary: `${result.id} -${result.name}`,
+                location: ` ${result.land_mark} , ${result.address}, ${result.city}` ,
+                description:  `Phone : ${result.phone} , pestsToControl: ${result.pestsToControl}, propertyType : ${result.propertyType}`,
+                start: {
+                  dateTime: `${result.serviceBeginDate}T10:00:00`,
+                  timeZone: 'IST',
+                },
+                end: {
+                  dateTime:  `${result.serviceBeginDate}T12:00:00`,
+                  timeZone: 'IST',
+                },
+                recurrence: [
+                    fr 
+                  ],
+              };
+              console.log("event",event)
+
     const auth = new google.auth.GoogleAuth({
       keyFile: './config/pescon-9db2a6f07876.json',
       scopes: 'https://www.googleapis.com/auth/calendar', //full access to edit calendar
     });
 
-    // res.sendStatus(500);
-    eventList.forEach(eventElement => {
-        
-    
-    auth.getClient().then(a => {
+      auth.getClient().then(a => {
         
       calendar.events.insert({
         auth: a,
         calendarId: process.env.GOOGLE_CALENDAR_ID,
-        resource: eventElement,
+        resource: event,
       }, function (err, event) {
         if (err) {
           console.log('There was an error contacting the Calendar service: ' + err);
           return;
         }
         console.log('Event created: %s', event.data);
-        
+        res.json("successfully created events")
       });
     });
-});
+
   } catch (error) {
     console.error('Error retrieving users from MongoDB:', error);
     res.sendStatus(500);

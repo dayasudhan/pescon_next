@@ -201,8 +201,35 @@ const app = express()
       res.sendStatus(500);
     }    
   });
- 
-
+  // const event = {
+  //   summary: 'Sample Event',
+  //   location: 'Location',
+  //   description: 'Description',
+  //   start: {
+  //     dateTime: '2023-10-01T10:00:00',
+  //     timeZone: 'IST',
+  //   },
+  //   end: {
+  //     dateTime: '2023-10-01T12:00:00',
+  //     timeZone: 'UTC',
+  //   },
+  // };
+  // const event = {
+  //   summary: `${result.id} -${result.name}`,
+  //   location: `Landmark : ${result.land_mark} ,Address : ${result.address},City : ${result.city}` ,
+  //   description:  `Phone : ${result.phone} ,pestsToControl: ${result.pestsToControl},propertyType : ${result.propertyType}`,
+  //   start: {
+  //     dateTime: `${startDate}T10:00:00`,
+  //     timeZone: 'IST',
+  //   },
+  //   end: {
+  //     dateTime:  `${startDate}T12:00:00`,
+  //     timeZone: 'IST',
+  //   },
+  //   recurrence: [
+  //       fr 
+  //     ],
+  // };
   app.get('/calendar/:id', mongoMiddleware,calendarRouteHandler);
 
   app.get('*', (req, res) => {
