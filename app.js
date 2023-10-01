@@ -114,6 +114,8 @@ const app = express()
       console.log("result",result.value.sequence);
       req.body['id'] = 'P' + result.value.sequence;
       req.body['contract'] = false;
+      req.body['createdAt'] = new Date();
+      req.body['updatedAt'] = new Date();
       console.log("result",req.body);
       const collection = req.db.collection('leads');
       const response = await collection.insertOne(req.body);
@@ -143,6 +145,7 @@ const app = express()
   app.patch('/leads/:id',mongoMiddleware, async (req, res) => {
     try {
       const userId = req.params.id;
+      req.body['updatedAt'] = new Date();
       const updatedFields = req.body;
       const collection = req.db.collection('leads');
       console.log("req.params.id",req.params.id)
@@ -166,6 +169,7 @@ const app = express()
       const objectId = new ObjectId(req.params.id);
       const  result = await collection.findOne({ _id :objectId});
       req.body.serviceHistory['date'] = new Date();
+      req.body['updatedAt'] = new Date();
       console.log("res",result?.serviceHistory)
       if(!result?.serviceHistory)
       {
