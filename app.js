@@ -4,11 +4,22 @@ require('dotenv').config();
 const dev = process.env.NODE_ENV !== 'production'
 const server = next({ dev })
 const handle = server.getRequestHandler()
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 
 server.prepare().then(() => {
   const app = express()
   app.get('/hello', (req, res) => res.send('Namaste Home Page'));
   app.get('/leads', (req, res) => res.send({'name':'dayasudhan'}));
+  app.get("/quotes", async (req, res) => {
+    const result = await  prisma.item.findMany({});
+    console.log('result', result);
+ 
+    res.json({
+      data: result,
+    
+    });
+  });
   app.get('*', (req, res) => {
     return handle(req, res)
   })
