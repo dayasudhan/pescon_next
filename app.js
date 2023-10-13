@@ -26,9 +26,9 @@ server.prepare().then(() => {
   app.get('*', (req, res) => {
     return handle(req, res)
   })
-  app.listen(process.env.port, (err) => {
+  app.listen(process.env.PORT, (err) => {
     if (err) throw err
-    console.log(`Server is listening on port ${process.env.port}.${process.env.DEV} `)
+    console.log(`Server is listening on port ${process.env.PORT}.${process.env.DEV} `)
   })
 })
 .catch((ex) => {
