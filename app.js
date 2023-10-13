@@ -10,15 +10,18 @@ const prisma = new PrismaClient();
 server.prepare().then(() => {
   const app = express()
   app.get('/hello', (req, res) => res.send('Namaste Home Page'));
-  app.get('/leads', (req, res) => res.send({'name':'dayasudhan'}));
-  app.get("/quotes", async (req, res) => {
-    const result = await  prisma.item.findMany({});
-    console.log('result', result);
- 
-    res.json({
-      data: result,
-    
-    });
+  app.get("/items", async (req, res) => {
+    res.send(await  prisma.item.findMany({}));
+  });
+  app.get("/enquiries", async (req, res) => {
+    res.send(await  prisma.enquiry.findMany({
+      include:{
+        item:true
+      }
+    }));
+  });
+  app.get("/items", async (req, res) => {
+    res.send(await  prisma.item.findMany({}));
   });
   app.get('*', (req, res) => {
     return handle(req, res)

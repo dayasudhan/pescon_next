@@ -25,7 +25,7 @@ export default class Footer extends Component {
         style={{ margin: '5em 0em 0em', padding: '5em 0em' }}
       >
         <Container textAlign="center">
-          <Grid divided inverted stackable>
+          {/* <Grid divided inverted stackable>
             <Grid.Column width={3}>
               <Header inverted as="h4" content="Group 1" />
               <List link inverted>
@@ -62,8 +62,8 @@ export default class Footer extends Component {
             </Grid.Column>
           </Grid>
 
-          <Divider inverted section />
-          <Image centered size="mini" src="/logo.png" />
+          <Divider inverted section /> */}
+          {/* <Image centered size="mini" src="/logo.png" /> */}
           <List horizontal inverted divided link size="small">
             <List.Item as="a" href="#">
               Site Map

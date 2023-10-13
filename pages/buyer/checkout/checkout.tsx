@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Segment } from 'semantic-ui-react';
-import ImageCarousel from './landing/carousal';
-import Header from './landing/header';
-// import Header2 from './landing/header2';
+import Header from '../../common/header';
+import Footer from '../../common/footer';
 import 'semantic-ui-css/semantic.css';
 import PersonDetails from './details';
 
@@ -12,7 +11,7 @@ export default class Cart extends Component {
       <Segment>
         <Header />
         <PersonDetails />
-        {/* <Footer /> */}
+        <Footer />
       </Segment>
     );
   }
