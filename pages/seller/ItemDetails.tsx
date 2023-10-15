@@ -33,7 +33,7 @@ const SegmentExampleNestedSegments = () => {
 
   const handleSubmit = async (event) => {
     try {
-      axios.post('/seller/upload', formData,{
+      axios.post('/upload', formData,{
           headers: {
             'Content-Type': 'multipart/form-data',
           },

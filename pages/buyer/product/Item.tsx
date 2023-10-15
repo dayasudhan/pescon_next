@@ -8,13 +8,13 @@ import ImageGallery2 from './horizontalgalley';
 import 'semantic-ui-css/semantic.css';
 import axios from 'axios';
 import Link from 'next/link';
-const baseURL = 'http://localhost:4000/seller/items/';
+const baseURL = '/items/';
 const imageUrls = [
   'https://farmifyequipments.s3.amazonaws.com/thumbnail-665949102-1695639571579-.jpeg',
   'https://farmifyequipments.s3.amazonaws.com/thumbnail-665949102-1695639571579-.jpeg',
   'https://farmifyequipments.s3.amazonaws.com/thumbnail-665949102-1695639571579-.jpeg'
 ];
-const enquiryURL = 'http://localhost:4000/seller/enquiry';
+const enquiryURL = '/enquiry';
 const Item = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -62,10 +62,9 @@ const closeSuccessModal = () => {
   setSuccessModalOpen(false);
 };
 const saveData = () => {
-
+console.log("saveData",formData,enquiryURL)
   // Perform Axios POST request here
-  axios.post(enquiryURL, formData)
-    .then(response => {
+  axios.post(enquiryURL, formData).then(response => {
       console.log('Data saved successfully:', response.data);
       closeModal();
       openSuccessModal();
@@ -83,7 +82,7 @@ const saveData = () => {
     console.log('response', response.data);
    
   })}
-},id);
+},[id]);
   console.log("Dayasudhan",router)
 
   return (
@@ -103,7 +102,7 @@ const saveData = () => {
         <Grid.Column>
           <div>
             <Link href="/buyer/cart/cart">
-              <a>{data?.name}</a>
+              {data?.name}
             </Link>
             <h1 className="ui header">
               <div href="#" className="header">
