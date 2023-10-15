@@ -3,7 +3,7 @@ import { Image, List, Rating } from 'semantic-ui-react';
 import Link from 'next/link';
 const baseURL = '/buyer/product/item?id=';
 const Item = (props) => {
-  const [url, setUrl] = React.useState(baseURL + props.data.id);
+  console.log("props",props)
   const imageUrl = props.data.image_urls ? props.data.image_urls[0] : null;
   return (
     <div>
@@ -11,13 +11,13 @@ const Item = (props) => {
         <div className="product-image6">
       
       {imageUrl && (
-        <Image src={imageUrl} size="medium" as="a" href={url} />
+        <Image src={imageUrl} size="medium" as="a" href={baseURL + props.data.id} />
       )}
  
         </div>
         <div className="product-content">
           <h3 className="ui header">
-            <Link href={url}>
+            <Link href={baseURL + props.data.id}>
              {props.data?.name}
             </Link>
 
