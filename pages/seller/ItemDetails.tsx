@@ -6,7 +6,8 @@ const SegmentExampleNestedSegments = () => {
   const [showModal, setShowModal] = useState(false);
   const [responseText, setResponseText] = useState('');
   const formRef = useRef(null);
-  const [image, setImage] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
   const [formData, setFormData] = useState({
     name: "Devraj",
     phone: "956629075",
@@ -14,42 +15,51 @@ const SegmentExampleNestedSegments = () => {
     email: "dayasudhankg@gmail.com",
     landMark:"",
     city:"Shimoga",
-    item_name:"",
+    item_name:"tractri",
     item_year:"2020",
     item_price:"25000",
     item_place:"",
     description:"Sample description",
-    image:""
   });
-  
+
   const handleInputChange = (event) => {
     console.log("event",event.target)
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
-  const handleImageChange = (event) => {
-    setFormData({ ...formData, ['image']: event.target.files[0] });
-  };
 
-  const handleSubmit = async (event) => {
-    try {
-      axios.post('/upload', formData,{
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }).then(response => {
-        setTimeout(() => {
-          setResponseText(`Item Posted Successfully With Id : ${response?.data?.id}`); // Set the response text to be shown in the modal
-          setShowModal(true); // Show the modal
-        }, 1000); // Delay of 1 second
-      })
-      .catch(error => {
-        console.error("error",error);
-      });
-    } catch (error) {
-      console.error('Error uploading image:', error);
+  const handleImageChange = (e) => {
+    if (e.target.files) {
+      const filesArray = Array.from(e.target.files);
+      setSelectedFiles(filesArray);
     }
-  }
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formDataFinal = new FormData();
+    selectedFiles.forEach((file, i) => {
+      formDataFinal.append('images', file);
+    });
+    for (const key in formData) {
+      if (formData.hasOwnProperty(key)) {
+        const value = formData[key];
+        console.log(`Key: ${key}, Value: ${value}`);
+        formDataFinal.append(key, value);
+      }
+    }
+    try {
+      const response = await axios.post('/upload', formDataFinal, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('Upload response:', response.data);
+      // Handle success
+    } catch (error) {
+      console.error('Error uploading images: ', error);
+      // Handle error
+    }
+  };
   const closeModal = () => {
     setShowModal(false);
     location.reload();
@@ -145,11 +155,12 @@ const SegmentExampleNestedSegments = () => {
           onChange={handleInputChange}/>
         </Form.Field>
         <div>
-          <label htmlFor="image">Image:</label>
+          <label htmlFor="images">Image:</label>
           <input
             type="file"
-            id="image"
-            accept="image/*"
+            id="images"
+            accept="images/*"
+            multiple 
             onChange={handleImageChange}
           />
         </div>

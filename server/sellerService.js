@@ -22,6 +22,7 @@ class SellerService {
   }
   async  insertItem(data) {
     console.log("insertItem data",data)
+    try{
     const item = await this.db.item.create({
       data: {
         name: data.item_name,
@@ -47,6 +48,11 @@ class SellerService {
       },
     });
     return item;
+  }
+  catch(e)
+  {
+    return e;
+  }
   }
 }
 module.exports = new SellerService();

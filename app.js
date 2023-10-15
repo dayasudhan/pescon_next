@@ -55,7 +55,7 @@ server.prepare().then(() => {
   const app = express()
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
-
+  
   app.get('/hello', (req, res) => res.send('Namaste Home Page'));
   app.get("/items", async (req, res) => {
     res.send(await sellerService.getAllItems());
@@ -76,18 +76,18 @@ server.prepare().then(() => {
     console.log('return', ret);
     res.send(ret);
   });
-  app.post('/upload', upload.single('image'), async (req, res) => {
+ app.post('/upload', upload.array('images',10), async (req, res) => {
   //app.post("/upload", async (req, res) => {
       console.log("i am inside upload")
-      if (!req.file) {
-        return res.status(400).json({ message: 'No image uploaded' });
+      if (!req.files || req.files.length === 0) {
+        return res.status(400).json({ message: 'No images uploaded' });
       }
-      // const title = body.title; 
-      console.log('Uploaded file:', req.file);
-      console.log('Uploaded body:', req.body);
-      const inp = {...req.body,"image_urls":[req.file.transforms[0].location]}
-      console.log("inp",inp)
-      const ret = await sellerService.insertItem(inp);
+      const images = req.files.map((file) => {
+        return file.transforms[0].location;
+      });
+  
+      const inputData = { ...req.body, image_urls: images };
+      const ret = await sellerService.insertItem(inputData);
       console.log('return', ret);
       res.send(ret);
     });
