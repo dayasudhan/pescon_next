@@ -9,11 +9,11 @@ import 'semantic-ui-css/semantic.css';
 import axios from 'axios';
 import Link from 'next/link';
 const baseURL = '/items/';
-const imageUrls = [
-  'https://farmifyequipments.s3.amazonaws.com/thumbnail-665949102-1695639571579-.jpeg',
-  'https://farmifyequipments.s3.amazonaws.com/thumbnail-665949102-1695639571579-.jpeg',
-  'https://farmifyequipments.s3.amazonaws.com/thumbnail-665949102-1695639571579-.jpeg'
-];
+// const imageUrls = [
+//   'https://farmifyequipments.s3.amazonaws.com/thumbnail-665949102-1695639571579-.jpeg',
+//   'https://farmifyequipments.s3.amazonaws.com/thumbnail-665949102-1695639571579-.jpeg',
+//   'https://farmifyequipments.s3.amazonaws.com/thumbnail-665949102-1695639571579-.jpeg'
+// ];
 const enquiryURL = '/enquiry';
 const Item = () => {
   const router = useRouter();
@@ -30,7 +30,7 @@ const Item = () => {
     zipCode:''
   });
  const [data, setData] = useState(null) 
- const [imageUrl,setImageUrl] = useState(null) 
+ const [imageUrls,setImageUrl] = useState(null) 
  
  
 
@@ -78,7 +78,7 @@ console.log("saveData",formData,enquiryURL)
   const url = baseURL + id;
   {id && axios.get(url).then((response) => {
     setData(response.data);
-    setImageUrl(response.data?.image_urls[0]);
+    setImageUrl(response.data?.image_urls);
     console.log('response', response.data);
    
   })}

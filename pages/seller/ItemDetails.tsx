@@ -48,13 +48,19 @@ const SegmentExampleNestedSegments = () => {
       }
     }
     try {
-      const response = await axios.post('/upload', formDataFinal, {
+      await axios.post('/upload', formDataFinal, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+      }).then(response => {
+        setTimeout(() => {
+          setResponseText(`Item Posted Successfully With Id : ${response?.data?.id}`); // Set the response text to be shown in the modal
+          setShowModal(true); // Show the modal
+        }, 1000); // Delay of 1 second
+      })
+      .catch(error => {
+        console.error("error",error);
       });
-      console.log('Upload response:', response.data);
-      // Handle success
     } catch (error) {
       console.error('Error uploading images: ', error);
       // Handle error

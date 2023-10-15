@@ -13,7 +13,8 @@ const ImageGallery = ({imageUrls}) => {
   };
 
   const handleNextClick = () => {
-    setCurrentIndex(Math.min(currentIndex + 1, imageUrls.length - 1));
+    if(imageUrls)
+      setCurrentIndex(Math.min(currentIndex + 1, imageUrls.length - 1));
   };
 
   return (
@@ -23,7 +24,7 @@ const ImageGallery = ({imageUrls}) => {
           <Button icon="arrow left" onClick={handlePrevClick} disabled={currentIndex === 0} />
           <div style={{ overflowX: 'scroll', flex: 1 }}>
             <div style={{ display: 'flex', flexDirection: 'row' }}>
-              {imageUrls.map((url, index) => (
+              {imageUrls && imageUrls.map((url, index) => (
                 <Image
                   key={index}
                   src={url}
@@ -37,7 +38,7 @@ const ImageGallery = ({imageUrls}) => {
           <Button
             icon="arrow right"
             onClick={handleNextClick}
-            disabled={currentIndex === imageUrls.length - 1}
+            disabled={imageUrls && currentIndex === imageUrls.length - 1}
           />
         </div>
       </Segment>
