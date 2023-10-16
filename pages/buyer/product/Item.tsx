@@ -9,11 +9,6 @@ import 'semantic-ui-css/semantic.css';
 import axios from 'axios';
 import Link from 'next/link';
 const baseURL = '/items/';
-// const imageUrls = [
-//   'https://farmifyequipments.s3.amazonaws.com/thumbnail-665949102-1695639571579-.jpeg',
-//   'https://farmifyequipments.s3.amazonaws.com/thumbnail-665949102-1695639571579-.jpeg',
-//   'https://farmifyequipments.s3.amazonaws.com/thumbnail-665949102-1695639571579-.jpeg'
-// ];
 const enquiryURL = '/enquiry';
 const Item = () => {
   const router = useRouter();
@@ -101,9 +96,9 @@ console.log("saveData",formData,enquiryURL)
         </Grid.Column>
         <Grid.Column>
           <div>
-            <Link href="/buyer/cart/cart">
+            {/* <Link href="/buyer/cart/cart">
               {data?.name}
-            </Link>
+            </Link> */}
             <h1 className="ui header">
               <div href="#" className="header">
                 {data?.name}
